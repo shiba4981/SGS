@@ -33,6 +33,44 @@
     }
     window.addEventListener('scroll', handleHeaderScroll, { passive: true });
     handleHeaderScroll();
+    // simple mobile nav toggle (put inside DOMContentLoaded)
+(function(){
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.main-nav');
+  if(!toggle || !nav) return;
+  function openNav(){
+    nav.style.display = 'flex';
+    nav.style.flexDirection = 'column';
+    nav.style.gap = '12px';
+    nav.style.position = 'fixed';
+    nav.style.top = '64px';
+    nav.style.right = '12px';
+    nav.style.background = 'rgba(3,3,8,0.98)';
+    nav.style.padding = '14px';
+    nav.style.borderRadius = '12px';
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeNav(){
+    nav.style.display = '';
+    nav.style.position = '';
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  toggle.addEventListener('click', ()=> {
+    if (toggle.getAttribute('aria-expanded') === 'true') closeNav();
+    else openNav();
+  });
+  // close when clicking a link
+  nav.addEventListener('click', (e)=> {
+    if(e.target.tagName === 'A') closeNav();
+  });
+  // close on escape
+  document.addEventListener('keydown', (e)=> {
+    if(e.key === 'Escape') closeNav();
+  });
+})();
+
 
     /* ---------------------------
        1.1) Registration button / modal behavior
@@ -360,11 +398,26 @@
   }); // DOMContentLoaded end
 
 })();
-const navToggle = document.getElementById('navToggle');
-const mainNav = document.getElementById('mainNav');
-navToggle.addEventListener('click', ()=>{
-  mainNav.classList.toggle('mobile-open');
-});
-function openModal() { modal.classList.add('show'); document.body.style.overflow = 'hidden'; }
-function closeModal(){ modal.classList.remove('show'); document.body.style.overflow = ''; }
-window.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeModal(); });
+// simple focus trap for modal - merge into DOMContentLoaded
+(function(){
+  const modal = document.getElementById('registerModal');
+  if(!modal) return;
+  modal.addEventListener('transitionstart', ()=> {});
+  const focusablesSel = 'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])';
+  let lastFocused = null;
+  function openModal(){
+    lastFocused = document.activeElement;
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    const first = modal.querySelector(focusablesSel);
+    if(first) first.focus();
+  }
+  function closeModal(){
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    if(lastFocused) lastFocused.focus();
+  }
+  // wire up your existing open/close buttons accordingly (you already have handlers).
+  // Escape key close already implemented in your script; ensure it calls closeModal().
+})();
+

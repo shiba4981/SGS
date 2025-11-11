@@ -21,30 +21,35 @@
     .btn.secondary { background:transparent; color:#333; border:1px solid #ddd; }
     .error { color:#b00020; font-size:13px; margin-top:6px; }
   </style>
-  <img
-  src="ai-800.jpg"
-  srcset="ai-480.jpg 480w, ai-800.jpg 800w, ai-1600.jpg 1600w"
-  sizes="(max-width:720px) 100vw, (max-width:1200px) 50vw, 420px"
-  alt="hero art"
-  loading="lazy"/>
-
 </head>
 <body>
 
 <header id="header">
   <div class="brand">Students Global Summit</div>
-  <nav>
+
+  <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+
+  <nav class="main-nav" aria-label="Main navigation">
     <a href="#theme">Theme</a>
     <a href="#speakers">Speakers</a>
+    <a href="#perks">Perks</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#faq">FAQ</a>
   </nav>
 
-  <a href="register.html" target="_blank" class="cta">Register ▸</a>
+  <a href="register.html" class="cta">Register ▸</a>
 </header>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg">
-    <img src="ai.png" alt="hero background">
+    <img
+  src="ai.png"
+  srcset="ai-320.jpg 320w, ai-640.jpg 640w, ai-1200.jpg 1200w"
+  sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 420px"
+  alt="hero background"
+/>
+
   </div>
   <div class="hero-inner">
     <div>
