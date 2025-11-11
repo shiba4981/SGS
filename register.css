@@ -1,0 +1,98 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at 30% 20%, #0a0018, #000);
+  color: #fff;
+}
+
+.register-page, .admin-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+.form-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 0 30px rgba(255, 0, 255, 0.2);
+}
+
+h1 { color: #ff8aff; margin-bottom: 10px; }
+p { color: #ccc; }
+
+label {
+  display: block;
+  margin: 12px 0 6px;
+  font-weight: 600;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+}
+textarea { resize: vertical; }
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn {
+  background: #ff8aff;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.btn.secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #999;
+}
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.msg { margin-top: 15px; font-weight: 600; }
+
+.admin-page {
+  flex-direction: column;
+  padding: 40px;
+  text-align: center;
+}
+
+.controls {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.list {
+  max-width: 800px;
+  width: 100%;
+  margin-top: 20px;
+}
+.item {
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  text-align: left;
+}
+.item h3 { color: #ff8aff; margin-bottom: 5px; }
+.item p { color: #ddd; margin: 4px 0; }
+.item small { color: #aaa; }
+.empty { color: #888; margin-top: 30px; }

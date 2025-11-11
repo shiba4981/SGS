@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Panel — SGS 2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="register.css">
+</head>
+<body>
+
+<main class="admin-page">
+  <h1>Admin Panel</h1>
+  <p>Below are all the registered participants.</p>
+
+  <div class="controls">
+    <button id="refresh" class="btn">Refresh</button>
+    <button id="clear" class="btn secondary">Clear All</button>
+  </div>
+
+  <div id="list" class="list"></div>
+</main>
+
+<script>
+  const key = 'sgs_registrations';
+  const list = document.getElementById('list');
+
+  function render() {
+    const data = JSON.parse(localStorage.getItem(key) || '[]').slice().reverse();
+    if (data.length === 0) {
+      list.innerHTML = '<p class="empty">No registrations yet.</p>';
+      return;
+    }
+    list.innerHTML = data.map((d, i) => `
+      <div class="item">
+        <h3>${d.name} (${d.age}, ${d.gender})</h3>
+        <p><b>Email:</b> ${d.email}</p>
+        <p><b>Reason:</b> ${d.why}</p>
+        <small>${new Date(d.ts).toLocaleString()}</small>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('refresh').addEventListener('click', render);
+  document.getElementById('clear').addEventListener('click', () => {
+    if (confirm('Clear all registrations?')) {
+      localStorage.removeItem(key);
+      render();
+    }
+  });
+
+  render();
+</script>
+
+</body>
+</html>
