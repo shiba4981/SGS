@@ -1894,3 +1894,155 @@ p  { font-size: clamp(0.95rem, 1.6vw, 1.05rem); line-height:1.5; }
     padding: 12px 0;
   }
 }
+/* =========================
+   Mobile / Tablet Fixes
+   Paste AFTER your main styles
+   ========================= */
+
+/* --- Base mobile adjustments (up to 640px) --- */
+@media (max-width: 600px) {
+
+  /* Header: smaller, avoid overlap with fixed header */
+  header {
+    padding: 10px 14px !important;
+    backdrop-filter: blur(8px);
+  }
+  header .brand { font-size: 1rem !important; }
+  header .cta { padding: 8px 12px !important; font-size: 0.95rem !important; }
+
+  /* Ensure top content isn't hidden behind fixed header */
+  body { padding-top: 64px; } /* matches header height */
+
+  /* Hero: stack, reduce sizes and spacing */
+  .hero {
+    padding: 92px 4vw 48px !important;
+    min-height: auto !important;
+    background-position: center top !important;
+  }
+  .hero-inner { display:block !important; text-align:left !important; gap: 18px !important; }
+  .hero h1 { font-size: clamp(2.2rem, 9vw, 3.4rem) !important; line-height:1.02 !important; letter-spacing: -1px !important; }
+  .hero h2 { font-size: clamp(1.05rem, 4.5vw, 1.6rem) !important; margin-top:6px !important; }
+  .hero p { font-size: 0.98rem !important; color: var(--muted) !important; }
+
+  /* Hide heavy decorative SVG on phones to avoid overlap */
+  .outline-25 { display: none !important; }
+
+  /* Hero background image: use cover and keep it from displacing text */
+  .hero-bg img { display:none !important; }
+  .hero { background-size: cover !important; background-attachment: scroll !important; }
+
+  /* Metrics & mission — single column and balanced spacing */
+  .mission-metrics { grid-template-columns: 1fr !important; gap: 14px !important; padding: 0 4vw !important; }
+  .metric-num { font-size: clamp(28px, 12vw, 44px) !important; }
+
+  /* Speakers grid: single column */
+  .speakers-grid { grid-template-columns: 1fr !important; gap: 14px !important; padding: 0 4vw !important; }
+  .speaker-card { min-height: auto !important; border-radius: 12px !important; padding-bottom: 12px !important; }
+  .speaker-card .portrait {
+    position: static !important;
+    width: 100% !important;
+    height: 220px !important;
+    border-radius: 12px !important;
+    margin: 12px 0 8px !important;
+    object-fit: cover !important;
+  }
+  .speaker-card .meta { padding: 10px 12px !important; }
+
+  /* Who cards: single column */
+  .who-cards { grid-template-columns: 1fr !important; gap: 14px !important; padding: 0 4vw 8vh !important; margin-top: 6vh !important; }
+
+  /* Perks: stacked */
+  .perks-inner { display: block !important; padding: 18px 4vw !important; }
+  .perks-right { padding-left: 0 !important; margin-top: 18px !important; }
+  .perks-right::before { display: none !important; }
+
+  /* Prize: stack columns and center CTA */
+  .prize-bottom { grid-template-columns: 1fr !important; gap: 18px !important; padding: 12px 4vw !important; }
+  .prize-box { width: 100% !important; padding: 18px !important; }
+  .register-cta { margin-top: 18px !important; }
+  .register-btn {
+    width: 90% !important;
+    padding: 12px 0 !important;
+    font-size: 1rem !important;
+    display: inline-block !important;
+  }
+
+  /* Schedule: tabs above, content below; avoid overflow */
+  .schedule-inner { display: block !important; padding: 18px 4vw !important; }
+  .date-tabs { justify-content: flex-start !important; gap: 10px !important; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
+  .date-tab { min-width: 96px !important; padding: 10px 12px !important; }
+
+  /* Slots: compact vertical layout */
+  .slots { padding: 12px !important; border-radius: 12px !important; }
+  .slot { flex-direction: column !important; gap: 8px !important; padding: 12px 6px !important; }
+  .slot-time { min-width: 0 !important; font-size: 0.95rem !important; }
+
+  /* FAQ: expand full width and reduce padding */
+  #faq { padding: 40px 4vw !important; }
+  .faq-item .q { padding: 14px 16px !important; font-size: 1rem !important; border-radius: 12px !important; }
+  .faq-item .a { padding: 10px 16px !important; font-size: 0.98rem !important; }
+
+  /* Modal: full-screen feel */
+  .modal-backdrop { align-items: flex-end !important; padding: 0 !important; }
+  .modal { width: 100% !important; height: 82vh !important; border-radius: 12px 12px 0 0 !important; box-shadow: none !important; padding: 16px !important; overflow:auto; }
+  .modal .row { display: block !important; }
+  .modal .actions { display: flex !important; flex-direction: column-reverse !important; gap: 10px !important; }
+  .modal .actions .btn { width: 100% !important; }
+
+  /* Footer spacing */
+  .final-bottom { flex-direction: column !important; gap: 8px !important; text-align: center !important; padding: 18px 4vw !important; }
+}
+
+/* --- Narrow phones (<=420px) micro tweaks --- */
+@media (max-width: 420px) {
+  .hero { padding: 84px 3.5vw 40px !important; }
+  .hero h1 { font-size: clamp(1.8rem, 9.5vw, 2.8rem) !important; }
+  .hero p { font-size: 0.95rem !important; }
+
+  header .brand { font-size: 0.95rem !important; }
+  header .cta { padding: 8px 10px !important; font-size: 0.9rem !important; }
+
+  .register-btn { width: 94% !important; font-size: 0.98rem !important; padding: 12px 0 !important; }
+
+  /* collapse large margins */
+  section { padding: 48px 3.5vw !important; }
+}
+
+/* --- Tablet adjustments (641px to 1024px) --- */
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* header */
+  header { padding: 14px 5vw !important; }
+
+  /* hero: two column but tighter */
+  .hero-inner { display: grid !important; grid-template-columns: 1fr 300px !important; gap: 22px !important; align-items: center !important; }
+  .outline-25 { width: 280px !important; display:block !important; }
+
+  /* speakers: 2 columns */
+  .speakers-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 18px !important; }
+
+  /* who cards: 2 columns */
+  .who-cards { grid-template-columns: repeat(2, 1fr) !important; gap: 18px !important; padding: 0 5vw 8vh !important; }
+
+  /* prize bottom: 2 columns stacked */
+  .prize-bottom { grid-template-columns: 1fr 1fr !important; gap: 22px !important; }
+  .prize-box { padding: 22px !important; }
+
+  /* schedule */
+  .schedule-inner { display: grid !important; grid-template-columns: 1fr 420px !important; gap: 26px !important; padding: 28px 5vw !important; }
+}
+
+/* --- Desktop: small safety net for very wide screens --- */
+@media (min-width: 1200px) {
+  .hero h1 { font-size: clamp(3.6rem, 6vw, 6.4rem) !important; }
+  .mission-metrics { gap: 36px !important; }
+  .speakers-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
+/* --- Accessibility: prefer reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* =========================
+   End of mobile fixes
+   ========================= */
