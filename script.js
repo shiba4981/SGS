@@ -187,31 +187,25 @@
     (function buildSpeakerCards(){
       const speakersData = [
         {
-          name: "Jeff J Hunter",
-          title: "Founder, Savage Marketer",
-          topText: 'Built a <strong class="highlight">3.6M+</strong> AI community and created the first <em>“AI Certified Consultant”</em> program for growth with human-like AI personas.',
-          img: "https://dummyimage.com/600x600/222/fff&text=Jeff+Hunter",
-          badgeLabel: "Keynote Speaker",
-          badgeSub: "Amrit-Peedhi 2025",
-          logo: "https://dummyimage.com/64x64/000/fff&text=UTK"
+          name: "Dr. Ramesh Kumar Mishra",
+          title: "Professor of cognitive science at the University of Hyderabad",
+          topText: 'Cognitive science, with research interests in attention, consciousness, perception, and bilingualism',
+          img: "Prof.Ramesh_Mishra.png",
+          
         },
         {
-          name: "Parthiv Shah",
-          title: "Founder & President, eLaunchers",
-          topText: 'Mailed over <strong>1 Billion</strong> letters and built <strong>10,000+</strong> marketing systems. The man who turns businesses into predictable money machines.',
-          img: "https://dummyimage.com/600x600/222/fff&text=Parthiv",
-          badgeLabel: "Keynote Speaker",
-          badgeSub: "Amrit-Peedhi 2025",
-          logo: "https://dummyimage.com/64x64/000/fff&text=UTK"
+          name: "Bodhisattwa Sanghapriya",
+          title: "Founder & CEO, IG Drones",
+          topText: 'Building a range of drones for surveillance & combat, with a focus on indigenous strength & global standards ',
+          img: "IG-Drones.png",
+          
         },
         {
-          name: "Dipali Shah",
-          title: "CEO, eLaunchers",
-          topText: '<em>Award-winning entrepreneur</em> helping doctors and professionals build lasting relationships through <strong>human first marketing</strong>.',
-          img: "https://dummyimage.com/600x600/222/fff&text=Dipali",
-          badgeLabel: "Keynote Speaker",
-          badgeSub: "Amrit-Peedhi 2025",
-          logo: "https://dummyimage.com/64x64/000/fff&text=UTK"
+          name: "Dr. Ashesh Padhy",
+          title: "Vice President & Head Odisha, JSW ",
+          topText: 'Currently, heading Mining and Steel projects of JSW Steel in Odisha',
+          img: "JSW.png",
+    
         },
       ];
 
@@ -222,6 +216,10 @@
       speakersData.forEach(sp => {
         const card = document.createElement('article');
         card.className = 'speaker-card';
+if (sp.name && /Ashesh\s+Padhy/i.test(sp.name)) {
+  card.classList.add('fix-name');
+}
+
         card.innerHTML = `
           <div class="top">
             <div class="top-copy">${sp.topText}</div>
@@ -233,14 +231,8 @@
             </div>
           </div>
           <img class="portrait" src="${escapeHtml(sp.img)}" alt="${escapeHtml(sp.name)} portrait" />
-          <div class="badge" aria-hidden="false">
-            <img class="logo" src="${escapeHtml(sp.logo)}" alt="">
-            <div>
-              <div class="badge-text">${escapeHtml(sp.badgeLabel)}</div>
-              <div class="badge-sub">${escapeHtml(sp.badgeSub)}</div>
-            </div>
-          </div>
-        `;
+          
+          </div>`;
         grid.appendChild(card);
       });
     })();
@@ -398,26 +390,31 @@
   }); // DOMContentLoaded end
 
 })();
-// simple focus trap for modal - merge into DOMContentLoaded
-(function(){
-  const modal = document.getElementById('registerModal');
-  if(!modal) return;
-  modal.addEventListener('transitionstart', ()=> {});
-  const focusablesSel = 'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])';
-  let lastFocused = null;
-  function openModal(){
-    lastFocused = document.activeElement;
-    modal.classList.add('show');
-    document.body.style.overflow = 'hidden';
-    const first = modal.querySelector(focusablesSel);
-    if(first) first.focus();
-  }
-  function closeModal(){
-    modal.classList.remove('show');
-    document.body.style.overflow = '';
-    if(lastFocused) lastFocused.focus();
-  }
-  // wire up your existing open/close buttons accordingly (you already have handlers).
-  // Escape key close already implemented in your script; ensure it calls closeModal().
-})();
 
+// Reorders speaker card DOM and removes badges/logos.
+// Run once (include at bottom of your script.js or run in browser console).
+(function normalizeSpeakerCards(){
+  const cards = document.querySelectorAll('.speaker-card');
+  cards.forEach(card => {
+    // Remove bottom badge/logo if present
+    const badge = card.querySelector('.badge');
+    if (badge) badge.remove();
+
+    // Locate portrait and meta blocks
+    const portrait = card.querySelector('.portrait');
+    const meta = card.querySelector('.meta');
+
+    // If portrait exists, ensure it's moved before meta so name/title will be below it
+    if (portrait && meta) {
+      // move portrait into the flow: append before meta
+      // if portrait currently absolute, keep it but still reorder DOM to simplify CSS
+      meta.parentNode.insertBefore(portrait, meta);
+    }
+
+    // Make sure meta is block and centered (in case earlier JS set flex)
+    if (meta) {
+      meta.style.display = 'block';
+      meta.style.textAlign = 'center';
+    }
+  });
+})();

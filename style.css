@@ -10,6 +10,166 @@
   --accent: #d400ff;
   --muted: #9ea4ac;
 }
+header .brand {
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+.hero p {
+  background: linear-gradient(90deg, #4bdde5, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+/* Apply same gradient style to both headings */
+.hero h1,
+.hero h2 {
+  background: linear-gradient(270deg, #a855f7, #ec4899, #00c6ff);
+  background-size: 600% 600%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientFlow 6s ease infinite;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+/* Smooth animated color shift */
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+/* -----------------------
+   Nav links: same animated gradient as hero
+   Paste after your hero h1/h2 gradient rules
+   ----------------------- */
+
+/* Ensure the gradient animation keyframes exist (skip if you already have them) */
+@keyframes gradientFlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Apply gradient text to nav links */
+header nav a {
+  /* same gradient/colors as hero */
+  background: linear-gradient(270deg, #a855f7, #ec4899, #00c6ff);
+  background-size: 600% 600%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; /* Safari/Chrome */
+  background-clip: text; /* modern browsers */
+  color: transparent; /* fallback for browsers that don't support clip */
+  animation: gradientFlow 6s ease infinite;
+  font-weight: 700;
+  text-decoration: none;     /* remove default underline */
+  position: relative;        /* for pseudo-element underline */
+  padding: 6px 8px;          /* small hit area, adjust as needed */
+  display: inline-block;
+}
+
+/* subtle animated gradient underline using pseudo-element */
+header nav a::after {
+  content: "";
+  position: absolute;
+  left: 8px;                 /* align with link padding */
+  right: 8px;
+  bottom: 4px;
+  height: 3px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #a855f7, #ec4899, #00c6ff);
+  background-size: 200% 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .28s cubic-bezier(.2,.9,.3,1);
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+/* reveal underline on hover / focus */
+header nav a:hover::after,
+header nav a:focus::after {
+  transform: scaleX(1);
+}
+
+/* stronger emphasis on active link (persisted underline + small lift) */
+header nav a.active,
+header nav a[aria-current="page"] {
+  transform: translateY(-2px);
+}
+header nav a.active::after,
+header nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* Accessibility and fallbacks */
+/* For reduced-motion users, stop the animation */
+@media (prefers-reduced-motion: reduce) {
+  header nav a { animation: none !important; background-size: auto !important; -webkit-text-fill-color: #fff !important; color: #fff !important; }
+  header nav a::after { transition: none !important; }
+}
+
+/* For older browsers that don't support background-clip:text, provide a solid color */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  header nav a {
+    -webkit-text-fill-color: unset;
+    color: #fff; /* fallback color — change if needed */
+    background: none;
+  }
+  header nav a::after { display: none; } /* hide fancy underline if gradient not supported */
+}
+
+/* Optional: slightly increase spacing/size on small screens for tap targets */
+@media (max-width: 720px) {
+  header nav a { padding: 10px 12px; font-size: 1rem; }
+  header nav { gap: 18px; }
+}
+/* Endorsement Section */
+.endorse-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* allows wrapping on small screens */
+  gap: 3rem; /* space between logos */
+  padding: 3rem 1rem;
+  background: #000; /* adjust or remove if not needed */
+}
+
+.endorse-section img {
+  max-width: 180px;  /* default size for desktop */
+  height: auto;
+  filter: brightness(1) contrast(1.1);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Hover effect for slight scale */
+.endorse-section img:hover {
+  transform: scale(1.08);
+  filter: brightness(1.2);
+}
+
+/* Tablet optimization */
+@media (max-width: 1024px) {
+  .endorse-section img {
+    max-width: 140px;
+  }
+}
+
+/* Mobile optimization */
+@media (max-width: 600px) {
+  .endorse-section {
+    gap: 1.5rem;
+    padding: 2rem 0.5rem;
+  }
+
+  .endorse-section img {
+    max-width: 110px;
+  }
+}
+
+
 
 /* make all images responsive */
 img, video, svg { max-width: 100%; height: auto; display: block; }
@@ -1900,7 +2060,7 @@ p  { font-size: clamp(0.95rem, 1.6vw, 1.05rem); line-height:1.5; }
    ========================= */
 
 /* --- Base mobile adjustments (up to 640px) --- */
-@media (max-width: 600px) {
+@media (max-width: 60px) {
 
   /* Header: smaller, avoid overlap with fixed header */
   header {
@@ -2034,7 +2194,7 @@ p  { font-size: clamp(0.95rem, 1.6vw, 1.05rem); line-height:1.5; }
 /* --- Desktop: small safety net for very wide screens --- */
 @media (min-width: 1200px) {
   .hero h1 { font-size: clamp(3.6rem, 6vw, 6.4rem) !important; }
-  .mission-metrics { gap: 36px !important; }
+  .mission-metrics { gap: 40px !important; }
   .speakers-grid { grid-template-columns: repeat(3, 1fr) !important; }
 }
 
@@ -2046,3 +2206,675 @@ p  { font-size: clamp(0.95rem, 1.6vw, 1.05rem); line-height:1.5; }
 /* =========================
    End of mobile fixes
    ========================= */
+/* ===============================
+   Speaker card: center portrait + meta under image
+   Paste AFTER your existing speaker styles
+   =============================== */
+
+hide bottom badge/logos entirely
+.speaker-card .badge { display: none !important; }
+
+/* default: keep desktop stacked card but center the portrait */
+.speaker-card .portrait {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
+  top: 140px;                /* keeps the same vertical overlap feel */
+  width: 180px;
+  height: 180px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.55);
+  border: 4px solid rgba(0,0,0,0.45);
+}
+
+/* when portrait is centered, ensure .meta area spans full width */
+.speaker-card .meta {
+  display: block;            /* allow it to be stacked under top block */
+  padding: 18px 22px;
+  background: rgba(0,0,0,0.62);
+  margin-top: 150px;         /* reserve space for the centered portrait */
+  text-align: center;       /* center name & title under the image */
+}
+.speaker-card .meta .info { flex: none; }
+.speaker-card .meta h3 { font-size: 1.12rem; margin: 0; font-weight: 800; color:#fff; }
+.speaker-card .meta p  { margin: 8px 0 0; color: var(--muted); font-style: italic; }
+
+/* MOBILE: make portrait flow inside card and name/title below it */
+@media (max-width: 720px) {
+  .speaker-card {
+    min-height: auto;
+    padding-bottom: 18px;
+    display: block;
+  }
+
+  /* portrait becomes part of normal flow, centered and narrower */
+  .speaker-card .portrait {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+    width: min(220px, 52%);
+    height: auto;
+    max-height: 320px;
+    margin: 12px auto 6px;
+    border-radius: 12px;
+    display: block;
+  }
+
+  /* make top copy keep left alignment if you want — else center */
+  .speaker-card .top { text-align: left; padding: 18px 18px 8px; min-height: auto; }
+  .speaker-card .top .top-copy { font-size: clamp(1rem, 2.6vw, 1.15rem); }
+
+  /* place meta directly below (centered) */
+  .speaker-card .meta {
+    background: rgba(0,0,0,0.65);
+    margin-top: 10px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .speaker-card .meta h3 { font-size: 1.05rem; }
+  .speaker-card .meta p { font-size: 0.95rem; line-height: 1.4; }
+
+  /* hide any leftover small logo images inside the badge area */
+  .speaker-card img.logo { display: none !important; }
+}
+
+/* safety: if other CSS sets .meta as flex (left-right), force vertical stacking */
+.speaker-card .meta { display: block !important; }
+.speaker-card .meta .info { width: 100%; }
+/* ===========================================
+   FIXED RESPONSIVE CSS
+   - Keeps laptop/mac layout intact
+   - Improves iPad & phone responsiveness
+   =========================================== */
+
+/* ---- Base (Desktop & MacBook keep your current layout) ---- */
+@media (min-width: 1025px) {
+  body { overflow-x: hidden; }
+  .hero,
+  .theme-inner,
+  .perks-inner,
+  .who-inner,
+  .schedule-inner,
+  .speakers-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* ---- Tablet (721px–1024px) ---- */
+@media (min-width: 721px) and (max-width: 1024px) {
+  header { padding: 14px 5vw; }
+
+  .hero { 
+    display: grid; 
+    grid-template-columns: 1fr 380px; 
+    gap: 24px; 
+    align-items: center; 
+    padding: 120px 5vw 80px; 
+  }
+
+  .speakers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+    padding: 0 5vw;
+  }
+
+  .speaker-card {
+    min-height: 420px;
+    position: relative;
+  }
+
+  .speaker-card .portrait {
+    position: absolute;
+    right: 20px;
+    top: 100px;
+    width: 140px;
+    height: 140px;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  .speaker-card .meta {
+    margin-top: 120px;
+    text-align: center;
+    padding: 18px 16px;
+  }
+
+  .who-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .endorse-section img {
+    max-width: 160px;
+  }
+}
+
+/* ---- Mobile (<=720px) ---- */
+@media (max-width: 720px) {
+  header {
+    padding: 10px 4vw;
+    height: 68px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+  }
+
+  body {
+    padding-top: 68px;
+  }
+
+  .hero {
+    padding: 90px 4vw 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+    line-height: 1.05;
+  }
+
+  .hero h2 {
+    font-size: clamp(1.1rem, 5vw, 1.5rem);
+  }
+
+  .hero p {
+    font-size: 1rem;
+    max-width: 90%;
+  }
+
+  .speakers-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 4vw;
+  }
+
+  .speaker-card {
+    position: static;
+    min-height: auto;
+    padding-bottom: 16px;
+  }
+
+  .speaker-card .portrait {
+    position: static;
+    width: min(240px, 70%);
+    margin: 12px auto;
+    height: auto;
+    border-radius: 12px;
+  }
+
+  .speaker-card .meta {
+    text-align: center;
+    padding: 12px 16px;
+  }
+
+  .who-cards,
+  .prize-bottom,
+  .perks-inner,
+  .schedule-inner {
+    grid-template-columns: 1fr;
+    padding: 0 4vw;
+    gap: 16px;
+  }
+
+  .endorse-section img {
+    max-width: 120px;
+  }
+
+  section {
+    padding: 48px 4vw;
+  }
+}
+
+/* ---- Very Small Phones (<=420px) ---- */
+@media (max-width: 420px) {
+  .hero {
+    padding: 80px 3.5vw 36px;
+  }
+
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero p {
+    font-size: 0.95rem;
+  }
+
+  .speaker-card .portrait {
+    width: 200px;
+  }
+
+  .endorse-section img {
+    max-width: 100px;
+  }
+}
+/* ================================
+   RESPONSIVE NAVBAR + REGISTER BUTTON
+   ================================ */
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 6vw;
+  background: rgba(5, 0, 20, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+/* brand (title) */
+header .brand {
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* nav links hidden on mobile (hamburger takes over) */
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* hamburger menu button */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.nav-toggle:hover { transform: rotate(90deg); }
+
+/* Register button styling */
+header .cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  border: 2px solid #b84bff;
+  background: transparent;
+  box-shadow: 0 0 10px rgba(184, 75, 255, 0.4);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+header .cta:hover {
+  background: linear-gradient(90deg, #b84bff, #7b2ff7);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(184, 75, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+/* ======================
+   RESPONSIVE BREAKPOINTS
+   ====================== */
+
+/* Tablet (max 1024px) */
+@media (max-width: 1024px) {
+  header {
+    padding: 14px 5vw;
+  }
+  header .brand {
+    font-size: 1.2rem;
+  }
+  header .cta {
+    padding: 9px 22px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Mobile (max 768px) */
+@media (max-width: 768px) {
+  header {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 12px 5vw;
+  }
+
+  /* show hamburger */
+  .nav-toggle {
+    display: block;
+  }
+
+  /* hide full nav */
+  header nav {
+    display: none;
+  }
+
+  /* align button nicely under brand */
+  header .cta {
+    margin-top: 10px;
+    align-self: center;
+    padding: 8px 22px;
+    font-size: 0.9rem;
+    border: 1.5px solid #b84bff;
+    box-shadow: 0 0 12px rgba(184, 75, 255, 0.5);
+  }
+}
+
+/* Small Phones (max 480px) */
+@media (max-width: 480px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 4vw;
+  }
+  header .brand {
+    font-size: 1rem;
+  }
+  header .cta {
+    margin-top: 8px;
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    border-radius: 40px;
+  }
+}
+:root{
+  --max-width:1200px;
+  --pad:18px;
+  --accent:#d400ff;
+  --muted:#9ea4ac;
+  --header-h:64px; /* consistent header height */
+}
+
+/* header shell */
+.site-header{
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  background: linear-gradient(180deg, rgba(8,6,12,0.95), rgba(6,4,8,0.9));
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  backdrop-filter: blur(6px);
+}
+
+/* main container row */
+.container{
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+  display: flex;
+  align-items: center;            /* vertical centering */
+  justify-content: space-between; /* brand left, controls right */
+  height: var(--header-h);        /* lock height so everything aligns */
+  gap: 12px;
+}
+
+/* keep brand single-line and vertically centered */
+.brand{
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-weight: 800;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;      /* prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* if extremely small screens */
+  display: inline-flex;
+  align-items: center;
+  height: 100%;             /* same as header */
+  padding: 0 6px;
+  font-size: 18px;
+  letter-spacing: 0.6px;
+  line-height: 1;
+}
+
+/* group right-side controls so they align as one block */
+.header-controls{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+}
+
+/* hamburger button — same vertical space as register */
+.nav-toggle{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  padding: 10px;           /* visual tappable area */
+  height: 44px;            /* consistent control height */
+  min-width: 44px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* hamburger bars centered inside the control */
+.hamburger{
+  width: 22px;
+  height: 2px;
+  background: #fff;
+  position: relative;
+}
+.hamburger::before, .hamburger::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 22px;
+  height: 2px;
+  background: #fff;
+}
+.hamburger::before{ top: -7px; }
+.hamburger::after{ top: 7px; }
+
+/* register button — same height and center alignment */
+.register-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;            /* match hamburger height */
+  padding: 0 16px;         /* horizontal spacing */
+  border-radius: 28px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(90deg, rgba(212,0,255,0.12), rgba(255,65,200,0.10));
+  border: 1px solid rgba(212,0,255,0.35);
+  box-shadow: 0 6px 18px rgba(212,0,255,0.08);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* hover / focus keeps layout stable (no vertical transform) */
+.register-btn:hover,
+.register-btn:focus{
+  transform: none; /* prevents vertical jump */
+  box-shadow: 0 10px 28px rgba(212,0,255,0.12);
+}
+
+/* responsive sizes */
+@media (max-width: 520px){
+  :root{ --header-h: 58px; }
+  .brand{ font-size: 15px; padding-left:4px; }
+  .register-btn{ padding: 0 10px; font-size:13px; height:40px; border-radius:24px; }
+  .nav-toggle{ height:40px; padding:8px; min-width:40px; }
+}
+
+@media (min-width: 521px) and (max-width: 900px){
+  :root{ --header-h: 64px; }
+  .brand{ font-size: 18px; }
+  .register-btn{ font-size:14px; height:44px; }
+}
+
+/* large screens */
+@media (min-width: 901px){
+  :root{ --header-h: 72px; }
+  .brand{ font-size: 20px; }
+  .register-btn{ font-size:15px; height:48px; padding: 0 18px; border-radius:30px; }
+  .nav-toggle{ height:48px; min-width:48px; }
+}
+@media (min-width: 901px) {
+  .nav-toggle { display: none; }
+  .nav-menu { display: flex; } /* example if you add a nav list later */
+}
+@media (max-width: 900px) {
+  .nav-menu { display: none; } /* hide the full menu on mobile */
+}
+/* Core layout */
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 24px;
+  height: 70px;
+}
+
+/* Brand always visible */
+.brand {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  background: linear-gradient(90deg, #c44fff, #ff67c5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: visible;
+  flex-shrink: 0; /* 🔒 prevents truncation */
+  font-size: 20px;
+}
+
+/* Navigation menu for large screens */
+.nav-menu {
+  display: none; /* hidden by default (mobile) */
+}
+
+.nav-menu a {
+  color: #d67cff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.nav-menu a:hover {
+  color: #fff;
+}
+
+/* Register button */
+.register-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  border-radius: 30px;
+  background: transparent;
+  border: 2px solid #b366ff;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.register-btn:hover {
+  background: #b366ff33;
+}
+
+/* Hamburger (mobile only) */
+.nav-toggle {
+  display: inline-flex;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.hamburger {
+  width: 22px;
+  height: 2px;
+  background: #fff;
+  position: relative;
+}
+
+.hamburger::before,
+.hamburger::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 2px;
+  background: #fff;
+  left: 0;
+}
+
+.hamburger::before {
+  top: -6px;
+}
+
+.hamburger::after {
+  top: 6px;
+}
+
+/* ---------------------------------- */
+/* ✅ Responsive behavior */
+/* ---------------------------------- */
+
+/* Small screens — show hamburger */
+@media (max-width: 900px) {
+  .nav-menu {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+  }
+}
+
+/* Large screens — show full nav & hide hamburger */
+@media (min-width: 901px) {
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+}
+.speaker-card .name {
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  background: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.25));
+  display: inline-block;
+  transform: translateY(0); /* ensure no negative shift */
+}
+.fix-name h3 {
+  margin-top: 22px;
+  position: relative;
+  z-index: 9;
+}
