@@ -2878,3 +2878,20 @@ header .cta:hover {
   position: relative;
   z-index: 9;
 }
+/* Quick override: force hero full viewport and full width */
+html,body {
+  height:100%;
+  margin:0;
+}
+.hero, .hero-hero, #hero, .intro {
+  min-height:100vh !important;
+  width:100% !important;
+  background-size:cover !important;
+  background-position:center center !important;
+  padding:0 !important;
+}
+.container, .site-container {
+  max-width: none !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
