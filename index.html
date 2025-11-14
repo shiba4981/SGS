@@ -1,435 +1,875 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Student Global Summit 2025</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+
+
   <!-- Small modal styles (kept inline for convenience) -->
   <style>
-    .modal-backdrop { position: fixed; inset: 0; background: rgba(10,10,12,0.6); display: none; align-items: center; justify-content: center; z-index: 1200; padding: 20px; }
-    .modal-backdrop.show { display: flex; }
-    .modal { background: #fff; max-width: 600px; width: 100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(2,6,23,0.4); padding: 20px; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-    .modal h3 { margin: 0 0 10px; font-size: 20px; }
-    .modal .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-    .modal label { font-size: 13px; color:#222; margin-bottom:4px; display:block; }
-    .modal input, .modal textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #d6d6d8; font-size: 14px; box-sizing: border-box; }
-    .modal textarea { min-height: 100px; resize: vertical; }
-    .modal .actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
-    .btn { background:#0b63ff; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:600; }
-    .btn.secondary { background:transparent; color:#333; border:1px solid #ddd; }
-    .error { color:#b00020; font-size:13px; margin-top:6px; }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 12, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1200;
+      padding: 20px;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      background: #fff;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(2, 6, 23, 0.4);
+      padding: 20px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    .modal h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .modal .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .modal label {
+      font-size: 13px;
+      color: #222;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .modal input,
+    .modal textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #d6d6d8;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .modal textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .modal .actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+
+    .btn {
+      background: #0b63ff;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .error {
+      color: #b00020;
+      font-size: 13px;
+      margin-top: 6px;
+    }
+  </style>
+
+  <!-- ========================
+       Hero-refined specific CSS
+       (this replaces the previous `.hero` block)
+       You may copy these rules into style.css if preferred.
+       ======================== -->
+  <style>
+    /* -- Hero-banner specific overrides and helpers (drop into style.css if you prefer) -- */
+    :root {
+      --hero-height: min(86vh, 980px);
+      --glass-grad: linear-gradient(180deg, rgba(4, 4, 8, 0.32), rgba(4, 4, 12, 0.72));
+      --accentA: #d400ff;
+      --accentB: #ff6dff;
+    }
+
+    /* Container for the improved hero */
+    .hero-refined {
+      position: relative;
+      min-height: var(--hero-height);
+      display: grid;
+      align-items: center;
+      padding: clamp(28px, 6vw, 120px) 6vw;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    /* background layers: image -> dark vignette -> color gradient glow */
+    .hero-refined__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-image: url('ai.png');
+    }
+
+    .hero-refined__overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: radial-gradient(60% 40% at 20% 20%, rgba(212, 0, 255, 0.14), transparent 15%), var(--glass-grad);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+    }
+
+    /* faint moving light streak for luxury motion */
+    .hero-refined__light {
+      position: absolute;
+      z-index: 2;
+      inset: auto -10% 10% auto;
+      width: 60%;
+      height: 80%;
+      background: linear-gradient(120deg, transparent, rgba(255, 109, 255, 0.06), rgba(0, 198, 255, 0.06));
+      transform: rotate(-12deg);
+      filter: blur(36px);
+      opacity: 0.95;
+      animation: lightMove 12s linear infinite;
+    }
+
+    @keyframes lightMove {
+      0% {
+        transform: translateX(-8%) rotate(-12deg);
+      }
+
+      50% {
+        transform: translateX(8%) rotate(-10deg);
+      }
+
+      100% {
+        transform: translateX(-8%) rotate(-12deg);
+      }
+    }
+
+    .hero-refined__inner {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 40px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* left copy: headline + paragraph + CTAs */
+    .hero-refined__headline {
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .hero-refined h1 {
+      margin: 0;
+      font-weight: 900;
+      font-size: clamp(36px, 8vw, 120px);
+      line-height: 0.9;
+      letter-spacing: -2px;
+      background: linear-gradient(90deg, var(--accentA), var(--accentB));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-refined h2 {
+      margin: 0;
+      font-weight: 800;
+      font-size: clamp(22px, 4vw, 54px);
+      color: #ffffffcc;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero-refined__copy {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: clamp(14px, 1.5vw, 20px);
+      max-width: 70%;
+    }
+
+    .hero-refined__meta {
+      margin-top: 14px;
+      font-weight: 700;
+      color: var(--accentA);
+    }
+
+    .hero-ctas {
+      margin-top: 22px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-hero {
+      padding: 14px 26px;
+      border-radius: 999px;
+      font-weight: 800;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--accentA), var(--accentB));
+      color: #081018;
+      box-shadow: 0 20px 50px rgba(212, 0, 255, 0.12);
+    }
+
+    /* right visual: outlined 2025 + stroke text */
+    .hero-refined__visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .hero-refined__stamp {
+      width: 360px;
+      height: 260px;
+      display: grid;
+      place-items: center;
+      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
+    }
+
+    .hero-refined__stamp svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* small responsive rules */
+    @media (max-width: 1000px) {
+      .hero-refined__inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-refined__copy {
+        max-width: 100%;
+      }
+
+      .hero-refined__visual {
+        margin-top: 8px;
+      }
+
+      .hero-refined__stamp {
+        width: 260px;
+        height: 180px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-refined {
+        padding: clamp(18px, 6vw, 56px) 4vw;
+      }
+
+      .hero-refined h1 {
+        font-size: clamp(28px, 10vw, 56px);
+      }
+
+      .hero-refined h2 {
+        font-size: clamp(16px, 5vw, 22px);
+      }
+
+      .hero-refined__inner {
+        gap: 18px;
+      }
+    }
   </style>
 </head>
+
 <body>
 
-<header id="header">
-  <div class="brand">Student Global Summit</div>
+  <header id="header">
+    <div class="brand">Student Global Summit</div>
 
-  <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
 
-  <nav class="main-nav" aria-label="Main navigation">
-    <a href="#theme">Theme</a>
-    <a href="#speakers">Speakers</a>
-    <a href="#perks">Perks</a>
-    <a href="#schedule">Schedule</a>
-    <a href="#faq">FAQ</a>
-  </nav>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#theme">Theme</a>
+      <a href="#speakers">Speakers</a>
+      <a href="#perks">Perks</a>
+      <a href="#schedule">Schedule</a>
+      <a href="#faq">FAQ</a>
+    </nav>
 
-  <a href="register.html" class="cta">Register ▸</a>
-</header>
+    <a href="register.html" class="cta">Register</a>
+  </header>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg">
-    <img
-  src="ai.png"
-  srcset="ai-320.jpg 320w, ai-640.jpg 640w, ai-1200.jpg 1200w"
-  sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 420px"
-  alt="hero background"
-/>
+  <!-- ====== REPLACED HERO (hero-refined) ====== -->
+  <section class="hero-refined" aria-labelledby="hero-title">
+    <div class="hero-refined__bg" role="img" aria-label="AI art background"></div>
+    <div class="hero-refined__overlay" aria-hidden="true"></div>
+    <div class="hero-refined__light" aria-hidden="true"></div>
 
-  </div>
-  <div class="hero-inner">
-    <div>
-      <p class="hero-date" style="color: white">DEC 18–20 · UTKAL UNIVERSITY · INDIA</p>
-      <h1>STUDENT</h1>
-      <h2>GLOBAL SUMMIT</h2>
-      <p>India’s premier student-led summit on the governance of Artificial Intelligence and its ethics.</p>
-      <div class="hero-cta">
-        <a href="#theme" class="link-more">Learn More ▸</a>
+    <div class="hero-refined__inner container">
+      <div class="hero-refined__headline">
+        <h1 id="hero-title">STUDENT <span
+           >GLOBAL
+            SUMMIT</span></h1>
+        <h2>India’s premier student-led summit on AI governance &amp; ethics</h2>
+
+        <p class="hero-refined__copy">Join creators, policymakers, and founders at Utkal University (Dec 18–20) for
+          three days of deep debate, policy labs, and product showcases. Curated speakers • government endorsement •
+          scholarship tracks.</p>
+
+        <div class="hero-refined__meta">DEC 18–20 · UTKAL UNIVERSITY · INDIA</div>
+
+        <div class="hero-ctas">
+          <a class="btn-hero btn-primary" href="register.html" id="primaryCTABtn">Register Now ▸</a>
+          <a class="btn-hero btn-ghost" href="#theme" id="learnMoreBtn">Learn more ▸</a>
+        </div>
+      </div>
+
+      <div class="hero-refined__visual" aria-hidden="true">
+        <div class="hero-refined__stamp" role="presentation">
+          <!-- decorative outlined 2025 — scalable SVG -->
+          <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="g2" x1="0" x2="1">
+                <stop offset="0" stop-color="#fff" stop-opacity="0.95" />
+                <stop offset="1" stop-color="#ff9aff" stop-opacity="0.95" />
+              </linearGradient>
+            </defs>
+            <text x="10" y="160" font-size="140" font-weight="900" fill="none" stroke="url(#g2)" stroke-width="7"
+              stroke-linecap="round" stroke-linejoin="round">2025</text>
+          </svg>
+        </div>
       </div>
     </div>
-    <div class="outline-25" aria-hidden="true">
-      <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg">
-        <defs><linearGradient id="grad" x1="0" x2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#ff9aff"/></linearGradient></defs>
-        <text x="10" y="200" font-size="220" font-weight="900"
-          fill="none" stroke="url(#grad)" stroke-width="8"
-          stroke-linecap="round" stroke-linejoin="round">25</text>
-      </svg>
-    </div>
-  </div>
-</section>
+  </section>
+  <!-- ====== END REPLACED HERO ====== -->
 
-<!-- Endorsements -->
-<section id="endorse" class="endorse-section">
-  <img src="endorsement.png" alt="Endorsed by Government of India and Odisha" class="endorse-img">
-</section>
+  <!-- Endorsements -->
+  <section id="endorse" class="endorse-section">
+    <img src="endorsement.png" alt="Endorsed by Government of India and Odisha" class="endorse-img">
+  </section>
 
-<!-- MISSION -->
-<section id="mission" class="mission-hero">
-  <div class="mission-inner">
-    <div class="mission-copy">
-      <p class="mission-lead">
-        This Summit flips the old narrative. Celebrating Indian students not as cheap talent but as creators of billion dollar outcomes.
-        For three days it brings together students, founders, and innovators to explore the blend of culture, code and ethics shaping the future. See you there!
-      </p>
-    </div>
+  <!-- MISSION -->
+  <section id="mission" class="mission-hero">
+    <div class="mission-inner">
+      <div class="mission-copy">
+        <p class="mission-lead">
+          This Summit flips the old narrative. Celebrating Indian students not as cheap talent but as creators of
+          billion dollar outcomes.
+          For three days it brings together students, founders, and innovators to explore the blend of culture, code and
+          ethics shaping the future. See you there!
+        </p>
+      </div>
 
-    <div class="mission-metrics" role="list" aria-label="Key metrics">
-      <div class="metric" role="listitem">
-        <div class="metric-num">300<span class="plus">+</span></div>
-        <div class="metric-sub">Partner Colleges</div>
-      </div>
-      <div class="metric" role="listitem">
-        <div class="metric-num">3<span class="plus">D</span></div>
-        <div class="metric-sub">Days</div>
-      </div>
-      <div class="metric" role="listitem">
-        <div class="metric-num">1,000<span class="plus">+</span></div>
-        <div class="metric-sub">Participating Delegates</div>
-      </div>
-      <div class="metric" role="listitem">
-        <div class="metric-num">∞</div>
-        <div class="metric-sub">Possibilities of creation</div>
+      <div class="mission-metrics" role="list" aria-label="Key metrics">
+        <div class="metric" role="listitem">
+          <div class="metric-num">300<span class="plus">+</span></div>
+          <div class="metric-sub">Partner Colleges</div>
+        </div>
+        <div class="metric" role="listitem">
+          <div class="metric-num">3<span class="plus">D</span></div>
+          <div class="metric-sub">Days</div>
+        </div>
+        <div class="metric" role="listitem">
+          <div class="metric-num">1,000<span class="plus">+</span></div>
+          <div class="metric-sub">Participating Delegates</div>
+        </div>
+        <div class="metric" role="listitem">
+          <div class="metric-num">∞</div>
+          <div class="metric-sub">Possibilities of creation</div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- THEME -->
-<section id="theme" class="theme-hero" aria-labelledby="themeTitle">
-  <div class="theme-inner">
-    <div class="theme-copy">
-      <span class="kicker">SUMMIT THEME</span>
-      <h2 id="themeTitle">Governance of AI &amp; its ethics</h2>
+  <!-- ======================================
+     NEW PROFESSIONAL THEME SECTION
+     ====================================== -->
+  <section id="theme" class="theme-pro" aria-labelledby="themeTitle">
 
-      <div class="theme-paragraphs">
-        <p>For decades, Indian students built billion-dollar outcomes while being labeled cheap. This summit flips that story.</p>
-        <p>It celebrates the hustler who balances exams, clients, code, and culture with ethics and excellence and invites international students.</p>
-        <p>Witness that blend of consciousness &amp; innovation.</p>
+    <!-- Animated glow layer -->
+    <div class="theme-pro-glow"></div>
+
+    <div class="theme-pro-inner">
+      <div class="theme-pro-left">
+        <span class="theme-kicker">SUMMIT THEME</span>
+        <h2 id="themeTitle">Governance of AI &amp; its ethics</h2>
+
+        <p class="theme-desc">
+          For decades, Indian students built billion-dollar outcomes while being labeled cheap. This summit flips that
+          narrative.
+        </p>
+        <p class="theme-desc">
+          It celebrates the hustler who balances exams, clients, code, culture, ethics and excellence while inviting
+          global participation.
+        </p>
+        <p class="theme-desc">
+          Witness that powerful blend of consciousness, innovation and policy-shaping thought leadership.
+        </p>
+      </div>
+
+      <div class="theme-pro-right">
+        <div class="theme-art-card">
+          <div class="theme-art-glow"></div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="theme-art" role="img" aria-label="Illustration of temple and sky"></div>
-  </div>
-</section>
+  <!-- PERKS -->
+  <!-- PERKS (NEW – PREMIUM FUTURISTIC DESIGN) -->
+  <section id="perks" class="perks-pro">
+    <div class="perks-pro-inner">
 
-<!-- PERKS -->
-<section id="perks" class="perks-section">
-  <div class="perks-inner">
-    <div class="perks-left">
-      <span class="label">EVENT PERKS</span>
-      <h2 class="perks-title">Purpose. Prestige. Possibility.</h2>
-      <p class="perks-intro">
-        This is more than an event. It's an all-inclusive experience designed for the next generation of leaders.
-      </p>
-    </div>
+      <div class="perks-pro-header">
+        <span class="label">EVENT PERKS</span>
+        <h2 class="title">Purpose. Prestige. Possibility.</h2>
+        <p class="subtitle">
+          Designed for India’s next generation of innovators — every perk reflects quality, comfort & impact.
+        </p>
+      </div>
 
-    <div class="perks-right" aria-hidden="false">
-      <div class="perks-list">
-        <div class="perk">
-          <div class="perk-icon" aria-hidden="true">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v7H3z"></path><path d="M5 14v4"></path><path d="M19 14v4"></path></svg>
-          </div>
-          <div class="perk-body">
-            <h4>Luxury Accommodation</h4>
-            <p>Stay in premium hotels like Mayfair Lagoon for a comfortable and prestigious experience.</p>
-          </div>
+      <div class="perks-grid">
+
+        <div class="perk-card">
+          <div class="perk-icon">🏨</div>
+          <h3>Luxury Accommodation</h3>
+          <p>Experience premium hotel stays like Mayfair Lagoon with comfort curated for delegates.</p>
         </div>
 
-        <hr class="perk-divider">
-
-        <div class="perk">
-          <div class="perk-icon" aria-hidden="true">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="11" rx="2"></rect><path d="M7 16v2"></path><path d="M17 16v2"></path></svg>
-          </div>
-          <div class="perk-body">
-            <h4>Complete Hospitality</h4>
-            <p>Enjoy all-inclusive access to meals, refreshments, and transport handled for you.</p>
-          </div>
+        <div class="perk-card">
+          <div class="perk-icon">🍽️</div>
+          <h3>Complete Hospitality</h3>
+          <p>All meals, refreshments, and transport included — enjoy a seamless summit experience.</p>
         </div>
 
-        <hr class="perk-divider">
+        <div class="perk-card">
+          <div class="perk-icon">🎓</div>
+          <h3>Government Certification</h3>
+          <p>Receive an official certificate endorsed by the Government of Odisha.</p>
+        </div>
 
-        <div class="perk">
-          <div class="perk-icon" aria-hidden="true">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v18l-6-4-6 4z"></path></svg>
-          </div>
-          <div class="perk-body">
-            <h4>Government Certification</h4>
-            <p>Receive an official certificate of participation from the Government of Odisha.</p>
-          </div>
+        <div class="perk-card">
+          <div class="perk-icon">🌐</div>
+          <h3>Networking With Leaders</h3>
+          <p>Meet founders, speakers, investors, and global experts shaping tomorrow.</p>
+        </div>
+
+        <div class="perk-card">
+          <div class="perk-icon">🚀</div>
+          <h3>Startup Support</h3>
+          <p>Present your ideas, get feedback from mentors, and explore funding opportunities.</p>
+        </div>
+
+        <div class="perk-card">
+          <div class="perk-icon">🎉</div>
+          <h3>Cultural Experiences</h3>
+          <p>Enjoy curated cultural programs, celebrations, and immersive activities.</p>
         </div>
 
       </div>
+
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- WHO -->
-<section id="who" class="who-hero" aria-labelledby="whoTitle">
-  <div class="who-inner">
-    <div class="who-top">
-      <span class="kicker">THE GROUP</span>
-      <h2 id="whoTitle">Who should join</h2>
-      <p class="who-sub">Clarifying who belongs at this summit</p>
-    </div>
-
-    <div class="who-cards" role="list">
-      <article class="who-card" role="listitem">
-        <div class="who-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 8l-6-6-2 2 3 3-8 8-3-3-2 2 4 4 2-2 8-8 3 3 2-2z" fill="currentColor"/></svg></div>
-        <h3>India's Next Gen Builders</h3>
-        <p>Students, creators, and innovators (16–30) shaping India’s AI and startup future.</p>
-      </article>
-
-      <article class="who-card" role="listitem">
-        <div class="who-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2v4m0 12v4M4.9 4.9l2.8 2.8m8.6 8.6l2.8 2.8M2 12h4m12 0h4M4.9 19.1l2.8-2.8m8.6-8.6l2.8-2.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
-        <h3>Aspiring Changemakers</h3>
-        <p>Entrepreneurs and youth policy enthusiasts driving responsible technology.</p>
-      </article>
-
-      <article class="who-card" role="listitem">
-        <div class="who-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l10 4-10 4-10-4 10-4zM4 10v6l8 4 8-4v-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
-        <h3>Elite University Scholars</h3>
-        <p>Exceptional thinkers from IITs, NITs, IIMs, AIIMS and other national institutions.</p>
-      </article>
-
-      <article class="who-card" role="listitem">
-        <div class="who-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l1.8 4.6L18.9 8l-4.5 2.9L14.6 18 12 14.9 9.4 18l.2-7.1L5.1 8l5.1-1.4L12 2z" fill="currentColor"/></svg></div>
-        <h3>Ethical Visionaries</h3>
-        <p>Future leaders merging Dharma with Data to build technology grounded in purpose.</p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- PRIZE -->
-<section id="prize" class="prize-hero" aria-labelledby="prizeTitle">
-  <div class="prize-inner">
-    <div class="prize-top">
-      <span class="kicker">WIN BIG REWARDS</span>
-      <h2 id="prizeTitle">Compete, Innovate &amp; Win</h2>
-      <p class="prize-lead">Your ideas have value. Earn rewards, visibility, and government-backed recognition for your brilliance.</p>
-    </div>
-
-    <div class="prize-box-wrap" aria-hidden="true">
-      <div class="prize-label">Total Prize Pool</div>
-      <div class="prize-box">
-        <div class="prize-value">₹5,50,000+</div>
-      </div>
-    </div>
-
-    <img src="coin-left.png" alt="" class="coin coin-left" aria-hidden="true">
-    <img src="coin-right.png" alt="" class="coin coin-right" aria-hidden="true">
-    <img src="coin-top.png" alt="" class="coin coin-top" aria-hidden="true">
-
-    <div class="prize-bottom">
-      <div class="prize-col">
-        <div class="icon">🔥</div>
-        <h3>Yuva Swadeshi Navachar Pradarshani</h3>
-        <p>A grand exhibition of India's student-led innovations. Showcase your AI, SaaS, and tech breakthroughs to investors, mentors, and government officials. Gain visibility, mentorship, and investment opportunities.</p>
+  <!-- PRIZE -->
+  <section id="prize" class="prize-hero" aria-labelledby="prizeTitle">
+    <div class="prize-inner">
+      <div class="prize-top">
+        <span class="kicker">WIN BIG REWARDS</span>
+        <h2 id="prizeTitle">Compete, Innovate &amp; Win</h2>
+        <p class="prize-lead">Your ideas have value. Earn rewards, visibility, and government-backed recognition for
+          your brilliance.</p>
       </div>
 
-      <div class="prize-col">
-        <div class="icon">🌐</div>
-        <h3>Voices of Future, The Global Policy Nexus</h3>
-        <p>Step into the shoes of ministers, diplomats, and leaders. Debate and create policies on AI governance and ethics. Winning policies will be published in the official event magazine and presented to officials.</p>
+      <div class="prize-box-wrap" aria-hidden="true">
+        <div class="prize-label">Total Prize Pool</div>
+        <div class="prize-box">
+          <div class="prize-value">₹5,50,000+</div>
+        </div>
       </div>
-    </div>
-  
+
+      <img src="coin-left.png" alt="" class="coin coin-left" aria-hidden="true">
+      <img src="coin-right.png" alt="" class="coin coin-right" aria-hidden="true">
+      <img src="coin-top.png" alt="" class="coin coin-top" aria-hidden="true">
+
+      <div class="prize-bottom">
+        <div class="prize-col">
+          <div class="icon">🔥</div>
+          <h3>Yuva Swadeshi Navachar Pradarshani</h3>
+          <p>A grand exhibition of India's student-led innovations. Showcase your AI, SaaS, and tech breakthroughs to
+            investors, mentors, and government officials. Gain visibility, mentorship, and investment opportunities.</p>
+        </div>
+
+        <div class="prize-col">
+          <div class="icon">🌐</div>
+          <h3>Voices of Future, The Global Policy Nexus</h3>
+          <p>Step into the shoes of ministers, diplomats, and leaders. Debate and create policies on AI governance and
+            ethics. Winning policies will be published in the official event magazine and presented to officials.</p>
+        </div>
+      </div>
+
       <!-- Register Now button -->
-    <div class="register-cta">
-      <a href="register.html" class="btn register-btn">Register Now ▸</a>
-    </div>
-    
-
-</section>
-
-<!-- SCHEDULE (redesigned) -->
-<section id="schedule" class="schedule-section">
-  <div class="schedule-inner">
-    <div class="schedule-left">
-      <span class="label">Schedule</span>
-      <h2 class="big-title">These three days can<br/>change your reality</h2>
-      <p class="lead">This is a collision of intellect, culture, and creative chaos.</p>
-    </div>
-
-    <div class="schedule-right">
-      <div class="date-tabs" role="tablist" aria-label="Schedule days">
-        <button class="date-tab active" data-day="1" role="tab" aria-selected="true">
-          <div class="day-label">Day 1</div>
-          <div class="day-num">18 <small>Dec</small></div>
-        </button>
-        <button class="date-tab" data-day="2" role="tab" aria-selected="false">
-          <div class="day-label">Day 2</div>
-          <div class="day-num muted">19 <small>Dec</small></div>
-        </button>
-        <button class="date-tab" data-day="3" role="tab" aria-selected="false">
-          <div class="day-label">Day 3</div>
-          <div class="day-num muted">20 <small>Dec</small></div>
-        </button>
+      <div class="register-cta">
+        <a href="register.html" class="btn register-btn">Register Now ▸</a>
       </div>
+  </section>
 
-      <div id="daySlots" class="slots" aria-live="polite"></div>
-    </div>
-  </div>
-</section>
-
-<!-- SPEAKERS -->
-<section id="speakers" class="speakers-section">
-  <div class="speakers-inner">
-    <div class="speakers-head">
-      <span class="label">THE SPEAKERS</span>
-      <h2 class="speakers-title">The Leaders Guiding This Conversation</h2>
-      <p class="speakers-lead">These speakers represent the summit spirit merging technical innovation, policy leadership and guide how AI can be built ethically and consciously.</p>
-    </div>
-    
-
-    <div id="speakerGrid" class="speakers-grid" aria-live="polite">
-      <!-- Speaker cards injected by JS -->
-    </div>
-  </div>
-</section>
+  <!-- SCHEDULE (cinematic slider) -->
 
 
-<!-- FAQ -->
-<section id="faq">
-  <div class="faq-inner" style="max-width:1000px;margin:0 auto;">
-    <span class="label">FAQ</span>
-    <h2>Frequently Asked Questions</h2>
-    <p class="lead">Everything you need to know about the summit</p>
+  <!-- SCHEDULE (cinematic slider) -->
+  <section id="schedule" class="schedule-cinematic" aria-labelledby="scheduleTitle">
+    <div class="schedule-wrap">
+      <div class="schedule-side" aria-hidden="false">
+        <span class="label">Schedule</span>
+        <h2 id="scheduleTitle" class="schedule-title">A Cinematic Timeline — 3 Days</h2>
+        <p class="schedule-sub">Curated keynotes, hands-on workshops and policy labs — designed for impact.</p>
 
-    <div class="faq-list">
-      <div class="faq-item">
-        <button type="button" class="q" aria-expanded="false">Who can attend the summit? <span class="chev">▾</span></button>
-        <div class="a" aria-hidden="true">
-          <p>Students, creators, and young professionals aged 16–30 who are passionate about technology, innovation, and building an ethical AI-driven future for India and beyond.</p>
+        <div class="schedule-days" role="tablist" aria-label="Schedule Days">
+          <button class="day-btn active" data-day="1" role="tab" aria-selected="true">
+            <span>Day 1</span><small>18 Dec</small>
+          </button>
+          <button class="day-btn" data-day="2" role="tab" aria-selected="false">
+            <span>Day 2</span><small>19 Dec</small>
+          </button>
+          <button class="day-btn" data-day="3" role="tab" aria-selected="false">
+            <span>Day 3</span><small>20 Dec</small>
+          </button>
         </div>
       </div>
 
-      <div class="faq-item">
-        <button type="button" class="q" aria-expanded="false">What is included in the fee? <span class="chev">▾</span></button>
-        <div class="a" aria-hidden="true">
-          <p>Access to every keynote, workshop, and showcase session, along with meals, cultural nights, networking events, and an official joint certificate from the Government of Odisha and VSSUT.</p>
+      <div class="schedule-timeline" id="timelineContainer" aria-live="polite">
+
+        <div class="cards-player" id="cardsPlayer" aria-roledescription="carousel" tabindex="0">
+          <!-- JS injects .cards-track -> .card elements here -->
         </div>
+
+        <div class="dots" id="dots" aria-hidden="false"></div>
+      </div>
+    </div>
+  </section>
+  <!-- SPEAKERS -->
+
+  <!-- START: Speakers — 3-up Play-Card Carousel -->
+  <section id="speakers" class="speakers-section speakers-3up">
+    <div class="speakers-inner container">
+      <div class="speakers-head">
+        <span class="label">THE SPEAKERS</span>
+        <h2 class="speakers-title">The Leaders Guiding This Conversation</h2>
+        <p class="speakers-lead">These speakers represent the summit spirit merging technical innovation, policy
+          leadership and guide how AI can be built ethically and consciously.</p>
       </div>
 
-      <div class="faq-item">
-        <button type="button" class="q" aria-expanded="false">Is this only for tech students? <span class="chev">▾</span></button>
-        <div class="a" aria-hidden="true">
-          <p>Not at all. The summit welcomes participants from all disciplines — law, design, business, policy, social sciences, and the arts.</p>
-        </div>
-      </div>
+      <div class="speakers-carousel" aria-roledescription="carousel">
+        <div class="carousel-track" role="list">
+          <!-- Card 1 -->
+          <article class="speaker-card play-card" role="listitem" tabindex="0" aria-label="Dr. Ramesh Kumar Mishra">
+            <div class="card-inner">
+              <div class="card-top">
+                <p class="card-excerpt">Cognitive science, with research interests in attention, consciousness,
+                  perception, and bilingualism</p>
+              </div>
 
-      <div class="faq-item">
-        <button type="button" class="q" aria-expanded="false">Is there an online option? <span class="chev">▾</span></button>
-        <div class="a" aria-hidden="true">
-          <p>Yes. The entire summit will be streamed live with interactive Q&amp;A, designed for a fully immersive virtual experience.</p>
+              <div class="portrait-wrap">
+                <img src="Prof.Ramesh_Mishra.png" alt="Dr. Ramesh Kumar Mishra" class="portrait">
+              </div>
+
+              <div class="card-meta">
+                <h3 class="speaker-name">Dr. Ramesh Kumar Mishra</h3>
+                <p class="speaker-role">Professor of cognitive science at the University of Hyderabad</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="speaker-card play-card" role="listitem" tabindex="0" aria-label="Bodhisattwa Sanghapriya">
+            <div class="card-inner">
+              <div class="card-top">
+                <p class="card-excerpt">Building a range of drones for surveillance &amp; combat, with a focus on
+                  indigenous strength &amp; global standards</p>
+              </div>
+
+              <div class="portrait-wrap">
+                <img src="IG-Drones.png" alt="Bodhisattwa Sanghapriya" class="portrait">
+              </div>
+
+              <div class="card-meta">
+                <h3 class="speaker-name">Bodhisattwa Sanghapriya</h3>
+                <p class="speaker-role">Founder &amp; CEO, IG Drones</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="speaker-card play-card" role="listitem" tabindex="0" aria-label="Dr. Ashesh Padhy">
+            <div class="card-inner">
+              <div class="card-top">
+                <p class="card-excerpt">Currently, heading Mining and Steel projects of JSW Steel in Odisha</p>
+              </div>
+
+              <div class="portrait-wrap">
+                <img src="JSW.png" alt="Dr. Ashesh Padhy" class="portrait">
+              </div>
+
+              <div class="card-meta">
+                <h3 class="speaker-name">Dr. Ashesh Padhy</h3>
+                <p class="speaker-role">Vice President &amp; Head Odisha, JSW</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Add more cards here if needed -->
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+  <!-- END: Speakers -->
 
-<!-- CTA + FOOTER -->
-<!-- FINAL HERO: Updated to match your screenshot, NO Get Tickets button -->
-<!-- FINAL STYLISH HERO (updated) -->
-<section id="final-hero" aria-labelledby="finalTitle">
-  <div class="final-visual">
-    <!-- subtle star/particle layer for depth -->
-    <canvas id="final-stars" aria-hidden="true"></canvas>
+  <!-- FAQ -->
+  <section id="faq" class="faq-section" aria-labelledby="faqHeading">
+    <div class="faq-inner" style="max-width:1100px;margin:0 auto;">
+      <div class="faq-head">
+        <span class="label">FAQ</span>
+        <h2 id="faqHeading" class="faq-title">Frequently Asked Questions</h2>
+        <p class="faq-lead">Everything you need to know about the summit</p>
+      </div>
 
-    <!-- large decorative stamp in top-left -->
-    <div class="stamp" aria-hidden="true"></div>
+      <div class="faq-list" role="list" aria-live="polite">
+        <div class="faq-item" data-id="q1">
+          <button class="faq-q" aria-expanded="false" aria-controls="a-q1">
+            <span class="faq-q-text">Who can attend the summit?</span>
+            <span class="faq-caret" aria-hidden="true"></span>
+          </button>
+          <div id="a-q1" class="faq-a" role="region" aria-labelledby="q1" aria-hidden="true">
+            <p>Students, creators, and young professionals aged 16–30 who are passionate about technology, innovation,
+              and building an ethical AI-driven future for India and beyond.</p>
+          </div>
+        </div>
 
-    <div class="final-inner">
+        <div class="faq-item" data-id="q2">
+          <button class="faq-q" aria-expanded="false" aria-controls="a-q2">
+            <span class="faq-q-text">What is included in the fee?</span>
+            <span class="faq-caret" aria-hidden="true"></span>
+          </button>
+          <div id="a-q2" class="faq-a" role="region" aria-labelledby="q2" aria-hidden="true">
+            <p>Access to every keynote, workshop, and showcase session, along with meals, cultural nights, networking
+              events, and an official joint certificate from the Government of Odisha and VSSUT.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-id="q3">
+          <button class="faq-q" aria-expanded="false" aria-controls="a-q3">
+            <span class="faq-q-text">Is this only for tech students?</span>
+            <span class="faq-caret" aria-hidden="true"></span>
+          </button>
+          <div id="a-q3" class="faq-a" role="region" aria-labelledby="q3" aria-hidden="true">
+            <p>Not at all. The summit welcomes participants from all disciplines — law, design, business, policy, social
+              sciences, and the arts.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-id="q4">
+          <button class="faq-q" aria-expanded="false" aria-controls="a-q4">
+            <span class="faq-q-text">Is there an online option?</span>
+            <span class="faq-caret" aria-hidden="true"></span>
+          </button>
+          <div id="a-q4" class="faq-a" role="region" aria-labelledby="q4" aria-hidden="true">
+            <p>Yes. The entire summit will be streamed live with interactive Q&amp;A, designed for a fully immersive
+              virtual experience.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL HERO — Cinematic Aurora + Glass (REPLACE existing final-hero) ===== -->
+  <section id="final-hero" aria-labelledby="finalTitle" class="final-hero">
+    <div class="final-aurora-layer" aria-hidden="true">
+      <canvas id="final-aurora"></canvas>
+      <div class="aurora-overlay"></div>
+    </div>
+
+    <div class="final-inner container">
       <div class="final-copy">
         <p class="final-kicker">An invitation to lead, not follow.</p>
 
         <h2 id="finalTitle" class="final-heading">
-          This isn't about AI — <span class="accent">It's about Ancient Intelligence.</span><br/>
+          This isn't about AI — <span class="accent">It's about Ancient Intelligence.</span><br>
           At Amrit-Peedhi 2025 you're defining the conscience of India's digital generation.
         </h2>
 
-        <p class="final-sub">A three-day summit for creators, changemakers and future policymakers. Join immersive debates, exhibitions and celebrations of Indian innovation.</p>
+        <p class="final-sub">A three-day summit for creators, changemakers and future policymakers. Join immersive
+          debates, exhibitions and celebrations of Indian innovation.</p>
 
         <div class="final-ctas">
-          <a class="btn btn-white" href="#sponsor">Become a sponsor</a>
+          <a class="btn btn-primary" href="#sponsor" id="becomeSponsorBtn">Become a sponsor</a>
+          <a class="btn btn-outline" href="#brochure">Download brochure</a>
         </div>
       </div>
 
-      <div class="final-art" role="img" aria-label="Illustration: doorway into future">
-        <!-- decorative rounded glass card with subtle glow -->
-        <div class="glass-card"></div>
+      <div class="final-art" role="img" aria-label="Decorative glass card and future doorway">
+        <div class="glass-card" id="glassCard" aria-hidden="true">
+          <div class="glass-inner">
+            <div class="glass-header">
+              <div class="glass-year">AMRIT-PEEDHI</div>
+              <div class="glass-date">Dec 18–20 · Utkal University</div>
+            </div>
+
+            <div class="glass-visual" aria-hidden="true">
+              <!-- Animated emblem: rings + pulsing core + 2025 -->
+              <svg viewBox="0 0 220 220" width="220" height="220" aria-hidden="true" focusable="false"
+                class="emblem-svg">
+                <defs>
+                  <radialGradient id="coreGrad" cx="50%" cy="40%">
+                    <stop offset="0%" stop-color="#fff" stop-opacity="0.95" />
+                    <stop offset="40%" stop-color="#a6fffb" stop-opacity="0.65" />
+                    <stop offset="100%" stop-color="#00c6ff" stop-opacity="0" />
+                  </radialGradient>
+                  <linearGradient id="ringGrad" x1="0" x2="1">
+                    <stop offset="0" stop-color="#d400ff" />
+                    <stop offset="1" stop-color="#00c6ff" />
+                  </linearGradient>
+                  <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="8" result="b" />
+                    <feMerge>
+                      <feMergeNode in="b" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                <!-- outer ring -->
+                <g transform="translate(110,110)">
+                  <circle class="ring ring--outer" r="88" fill="none" stroke="url(#ringGrad)" stroke-width="2.2"
+                    opacity="0.95" />
+                  <circle class="ring ring--mid" r="62" fill="none" stroke="rgba(255,255,255,0.06)"
+                    stroke-width="1.6" />
+                  <circle class="ring ring--inner" r="36" fill="none" stroke="rgba(255,255,255,0.12)"
+                    stroke-width="1.4" />
+                </g>
+
+                <!-- pulsating core -->
+                <g transform="translate(110,110)" filter="url(#softGlow)">
+                  <circle cx="0" cy="-4" r="14" fill="url(#coreGrad)" class="core" />
+                  <circle cx="0" cy="-4" r="26" fill="none" stroke="rgba(166,255,251,0.08)" class="core-halo" />
+                </g>
+
+                <!-- tiny orbit dots -->
+                <g transform="translate(110,110)" class="orbits">
+                  <circle cx="68" cy="-2" r="3" fill="#d400ff" class="orb o1" />
+                  <circle cx="-64" cy="10" r="2.5" fill="#00c6ff" class="orb o2" />
+                  <circle cx="0" cy="72" r="2.2" fill="#9b7cff" class="orb o3" />
+                </g>
+
+                <!-- year/label anchored below -->
+                <g transform="translate(110,170)">
+                  <text x="0" y="0" text-anchor="middle" font-family="Inter, system-ui, -apple-system" font-weight="700"
+                    font-size="14" fill="#e9f7ff" opacity="0.95">2025</text>
+                </g>
+              </svg>
+            </div>
+
+
+            <div class="glass-footer">
+              <div class="glass-tag">Policy · Ethics · Innovation</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="final-bottom">
+      <nav class="final-links">
+        <a href="#sponsor">Become a Sponsor</a>
+        <a href="#speakers">Get Delegate Pass</a>
+        <a href="#brochure">Download Brochure</a>
+      </nav>
+
+      <div class="copyright">© Global Student Summit 2025. All rights reserved.</div>
+    </div>
+  </section>
+  <!-- ===== END FINAL HERO ===== -->
+
+
+  <!-- Registration Modal (kept) -->
+  <div id="registerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
+    <div class="modal" role="document">
+      <h3 id="registerTitle">Register for Students Global Summit</h3>
+      <form id="registerForm" novalidate>
+        <div class="row">
+          <div>
+            <label for="name">Full name</label>
+            <input id="name" name="name" type="text" required placeholder="Your name">
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required placeholder="you@example.com">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="mobile">Mobile number</label>
+            <input id="mobile" name="mobile" type="tel" pattern="^[0-9]{7,15}$" required placeholder="10-digit mobile">
+          </div>
+          <div>
+            <label for="college">College / Institution</label>
+            <input id="college" name="college" type="text" required placeholder="Your college">
+          </div>
+        </div>
+
+        <div>
+          <label for="reason">Why do you want to join?</label>
+          <textarea id="reason" name="reason" placeholder="Tell us in 1–2 sentences" required></textarea>
+        </div>
+
+        <div id="formError" class="error" aria-live="polite" style="display:none;"></div>
+
+        <div class="actions">
+          <button type="button" id="closeModal" class="btn secondary">Cancel</button>
+          <button type="submit" id="submitReg" class="btn">Submit Registration</button>
+        </div>
+      </form>
+    </div>
   </div>
-
-  <div class="final-bottom">
-    <nav class="final-links">
-      <a href="#sponsor">Become a Sponsor</a>
-      <a href="#speakers">Get Delegate Pass</a>
-      <a href="#brochure">Download Brochure</a>
-    </nav>
-
-    <div class="copyright">© Global Student Summit 2025. All rights reserved.</div>
-  </div>
-</section>
-
-<!-- Registration Modal (kept) -->
-<div id="registerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
-  <div class="modal" role="document">
-    <h3 id="registerTitle">Register for Students Global Summit</h3>
-    <form id="registerForm" novalidate>
-      <div class="row">
-        <div>
-          <label for="name">Full name</label>
-          <input id="name" name="name" type="text" required placeholder="Your name">
-        </div>
-        <div>
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" required placeholder="you@example.com">
-        </div>
-      </div>
-
-      <div class="row">
-        <div>
-          <label for="mobile">Mobile number</label>
-          <input id="mobile" name="mobile" type="tel" pattern="^[0-9]{7,15}$" required placeholder="10-digit mobile">
-        </div>
-        <div>
-          <label for="college">College / Institution</label>
-          <input id="college" name="college" type="text" required placeholder="Your college">
-        </div>
-      </div>
-
-      <div>
-        <label for="reason">Why do you want to join?</label>
-        <textarea id="reason" name="reason" placeholder="Tell us in 1–2 sentences" required></textarea>
-      </div>
-
-      <div id="formError" class="error" aria-live="polite" style="display:none;"></div>
-
-      <div class="actions">
-        <button type="button" id="closeModal" class="btn secondary">Cancel</button>
-        <button type="submit" id="submitReg" class="btn">Submit Registration</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<script src="script.js"></script>
 </body>
+
 </html>
