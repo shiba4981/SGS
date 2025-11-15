@@ -200,11 +200,22 @@ header .cta:hover {
 @media (max-width:900px) {
   header {
     padding: 12px 5vw;
-    height: var(--header-h)
+    height: var(--header-h);
+    max-width: 70vw;
+    justify-content: space-around;
+    align-items: center;
+    display: flex;
+  }
+  header .cta{
+    margin-left:45vw;
+    padding: 0px 15px
   }
 
   header nav {
     display: none
+  }
+  header .brand{
+    display: none;
   }
 
   .nav-toggle {
@@ -244,6 +255,7 @@ header .cta:hover {
   background-repeat: no-repeat;
   overflow: hidden;
 }
+
 
 .hero::before {
   content: "";
@@ -372,54 +384,58 @@ color: var(--muted);
 /* =========================
    ENDORSE / LOGOS
    ========================= */
+/* =========================
+   ENDORSE / LOGOS (FINAL)
+   ========================= */
 .endorse-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 3rem;
-  padding: 3rem 1rem;
-  padding-bottom: 0;
+  gap: 2.5rem;
+  padding: 2.5rem 1rem;
+  padding-bottom: 0px;
   background: #000;
-  text-align: center;
 }
 
 .endorse-section img {
-  max-width: 1800px;
+  max-width: 80px;        /* FIXED SIZE */
   height: auto;
+  object-fit: contain;
+  transition: .3s ease;
   filter: brightness(1) contrast(1.1);
-  transition: transform .3s ease, filter .3s ease
 }
 
+/* FIRST & LAST LOGO WHITE */
+.endorse-section img:first-child,
+.endorse-section img:last-child {
+  filter: brightness(0) invert(1); /* makes white */
+}
+.endorse-section img:last-child {
+  max-width: 50px;
+}
 
 .endorse-section img:hover {
   transform: scale(1.08);
-  filter: brightness(1.2)
-}
-
-@media(max-width:1024px) {
-  .endorse-section img {
-    max-width: 140px
-  }
+  filter: brightness(1.2);
 }
 
 @media(max-width:600px) {
   .endorse-section {
-    gap: 1.5rem;
-    padding: 2rem 0.5rem
+    gap: 1.3rem;
+    padding: 1.8rem 0.5rem;
   }
-
   .endorse-section img {
-    max-width: 110px
+    width: 95px;
   }
 }
+
 
 /* =========================
    MISSION / METRICS
    ========================= */
 .mission-hero {
   padding: 120px 6vw;
-  padding-top: 90px;
+  padding-top: 0px;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.98), rgba(0, 0, 0, 0.98));
   position: relative;
   overflow: hidden
