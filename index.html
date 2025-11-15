@@ -4,11 +4,79 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#d400ff" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Student Global Summit" />
   <title>Student Global Summit 2025</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
+   <!-- Basic SEO -->
+  <title>Student Global Summit 2025 — AI Governance, Policy & Student Innovation</title>
+  <meta name="description" content="Student Global Summit 2025 — Dec 18–20 · Utkal University. Policy labs, hackathons, exhibitions and panels on AI governance & ethics." />
+  <meta name="keywords" content="Student Global Summit, AI governance, AI ethics, Utkal University, hackathon, policy lab, student startup, India summit 2025" />
+  <meta name="author" content="Student Global Summit" />
+  <link rel="canonical" href="https://yourdomain.example/" />
+
+  <!-- Crawling / Indexing -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="referrer" content="no-referrer-when-downgrade" />
+
+  <!-- Open Graph (Facebook, LinkedIn etc.) -->
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Student Global Summit 2025 — AI Governance & Ethics" />
+  <meta property="og:description" content="Dec 18–20 · Utkal University. Join students, policymakers, founders for hands-on policy labs, showcases, and debates." />
+  <meta property="og:url" content="https://yourdomain.example/" />
+  <meta property="og:site_name" content="Student Global Summit" />
+  <meta property="og:image" content="https://yourdomain.example/og-image.jpg" />
+  <meta property="og:image:alt" content="Student Global Summit 2025 — Utkal University" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@YourTwitterHandle" />
+  <meta name="twitter:creator" content="@YourTwitterHandle" />
+  <meta name="twitter:title" content="Student Global Summit 2025 — AI Governance & Ethics" />
+  <meta name="twitter:description" content="Dec 18–20 · Utkal University. Policy labs, hackathons, showcases and panels on AI governance & ethics." />
+  <meta name="twitter:image" content="https://yourdomain.example/twitter-card.jpg" />
+
+  <!-- Social Harvesting: structured data (JSON-LD) for Event and Organization (see snippet below) -->
+  <script type="application/ld+json" id="ld-event">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Student Global Summit 2025",
+    "startDate": "2025-12-18T10:00:00+05:30",
+    "endDate": "2025-12-20T20:00:00+05:30",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "location": {
+      "@type": "Place",
+      "name": "Utkal University",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bhubaneswar",
+        "addressRegion": "Odisha",
+        "addressCountry": "IN"
+      }
+    },
+    "image": [
+      "https://yourdomain.example/og-image.jpg"
+    ],
+    "description": "Student-led summit on AI governance, policy labs, hackathons & student showcases.",
+    "organizer": {
+      "@type": "Organization",
+      "name": "Student Global Summit",
+      "url": "https://yourdomain.example/"
+    }
+  }
+  </script>
 
 
   <!-- Small modal styles (kept inline for convenience) -->
@@ -322,28 +390,20 @@
 <body>
 
   <header id="header">
-  <div class="brand">Student Global Summit</div>
+    <div class="brand">Student Global Summit</div>
 
-  <button
-    class="nav-toggle"
-    id="nav-toggle"
-    aria-label="Open menu"
-    aria-expanded="false"
-    aria-controls="main-nav"
-  >
-    ☰
-  </button>
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
 
-  <nav class="main-nav" id="main-nav" aria-label="Main navigation">
-    <a href="#theme">Theme</a>
-    <a href="#speakers">Speakers</a>
-    <a href="#perks">Perks</a>
-    <a href="#schedule">Schedule</a>
-    <a href="#faq">FAQ</a>
-  </nav>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#theme">Theme</a>
+      <a href="#speakers">Speakers</a>
+      <a href="#perks">Perks</a>
+      <a href="#schedule">Schedule</a>
+      <a href="#faq">FAQ</a>
+    </nav>
 
-  <a href="register.html" class="cta">Register</a>
-</header>
+    <a href="register.html" class="cta">Register</a>
+  </header>
 
   <!-- ====== REPLACED HERO (hero-refined) ====== -->
   <section class="hero-refined" aria-labelledby="hero-title">
