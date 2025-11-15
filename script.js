@@ -132,31 +132,25 @@
       ]
     };
 
-    // Run immediately (assumes outer script loaded inside DOMContentLoaded)
     const player = document.getElementById('cardsPlayer');
     const dayBtns = Array.from(document.querySelectorAll('.day-btn'));
-
-    if (!player) {
-      console.error('[Schedule] Missing #cardsPlayer element.');
-      return;
-    }
-
-    if (!dayBtns.length) {
-      console.warn('[Schedule] No .day-btn elements found.');
-    }
-
-    console.log('[Schedule] available keys:', Object.keys(scheduleData));
+    if (!player) { console.error('[Schedule] Missing #cardsPlayer'); return; }
 
     const GAP = 20;
     let track = null;
     let currentIndex = 0;
 
     function escapeHtml(s) {
-      return String(s || '').replace(/&/g, '&amp;')
-                             .replace(/"/g, '&quot;')
-                             .replace(/'/g, '&#39;')
-                             .replace(/</g, '&lt;')
-                             .replace(/>/g, '&gt;');
+      return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function isVerticalMode() {
+      return window.innerWidth <= 900; // matches CSS breakpoint
     }
 
     function getCardWidth() {
@@ -167,6 +161,20 @@
 
     function centerCard(index = 0, instant = false) {
       if (!track) return;
+      if (isVerticalMode()) {
+        // In vertical mode we don't use transform centering — scroll into view instead
+        const cards = Array.from(track.children);
+        index = Math.max(0, Math.min(index, cards.length - 1));
+        currentIndex = index;
+        const target = cards[index];
+        if (target) {
+          target.scrollIntoView({ behavior: instant ? 'auto' : 'smooth', block: 'center' });
+          cards.forEach((c, i) => c.classList.toggle('center', i === index));
+        }
+        return;
+      }
+
+      // horizontal centering path
       const cards = Array.from(track.children);
       if (!cards.length) return;
       index = Math.max(0, Math.min(index, cards.length - 1));
@@ -180,13 +188,9 @@
     }
 
     function buildTrackFor(dayKeyRaw) {
-      // normalize key to string to avoid number/string mismatch
       const dayKey = (typeof dayKeyRaw === 'number') ? String(dayKeyRaw) : String(dayKeyRaw || '1');
-      console.log('[Schedule] buildTrackFor called with:', dayKeyRaw, '=> normalized:', dayKey);
-
       const data = scheduleData[dayKey] || scheduleData[Number(dayKey)] || scheduleData[String(dayKey)];
       if (!data || !data.length) {
-        console.warn('[Schedule] No data for day', dayKey, ' — scheduleData keys: ', Object.keys(scheduleData));
         player.innerHTML = `<div style="color:rgba(255,255,255,0.6);padding:20px">No schedule for day ${escapeHtml(dayKey)}</div>`;
         return;
       }
@@ -195,7 +199,6 @@
       track = document.createElement('div');
       track.className = 'cards-track';
       player.appendChild(track);
-      
 
       data.forEach((item, i) => {
         const card = document.createElement('div');
@@ -211,21 +214,51 @@
         track.appendChild(card);
       });
 
+      // apply vertical class if needed (this mirrors CSS media behavior)
+      if (isVerticalMode()) {
+        track.classList.add('vertical');
+      } else {
+        track.classList.remove('vertical');
+      }
+
       attachCardInteractions();
+      // small delay to allow layout to settle before centering/scrolling
       setTimeout(()=> centerCard(0, true), 60);
     }
 
     function attachCardInteractions() {
       if (!track) return;
       const cards = Array.from(track.children);
-      cards.forEach(c => { c.onpointermove = c.onpointerleave = c.onclick = c.onmouseenter = c.onmouseleave = null; });
+
+      // clear previous handlers (defensive)
+      cards.forEach(c => {
+        c.onpointermove = c.onpointerleave = c.onclick = c.onmouseenter = c.onmouseleave = null;
+        c._hoverTimeout && clearTimeout(c._hoverTimeout);
+      });
 
       cards.forEach((card, idx) => {
-        card.addEventListener('click', () => { if (window.innerWidth > 900) centerCard(idx); });
-        card.addEventListener('mouseenter', () => { if (window.innerWidth > 900) card._hoverTimeout = setTimeout(()=> centerCard(idx), 220); });
-        card.addEventListener('mouseleave', () => clearTimeout(card._hoverTimeout));
+        // click: center on desktop, scroll into view on mobile
+        card.addEventListener('click', () => {
+          if (isVerticalMode()) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            cards.forEach((c, i) => c.classList.toggle('center', i === idx));
+            currentIndex = idx;
+          } else {
+            centerCard(idx);
+          }
+        });
+
+        // desktop hover/tilt - disabled on small screens
+        card.addEventListener('mouseenter', () => {
+          if (isVerticalMode()) return;
+          card._hoverTimeout = setTimeout(()=> centerCard(idx), 220);
+        });
+        card.addEventListener('mouseleave', () => {
+          clearTimeout(card._hoverTimeout);
+        });
+
         card.addEventListener('pointermove', (ev) => {
-          if (window.innerWidth <= 900) return;
+          if (isVerticalMode()) return;
           const r = card.getBoundingClientRect();
           const cx = r.left + r.width / 2;
           const cy = r.top + r.height / 2;
@@ -244,12 +277,9 @@
           card.classList.remove('tilt');
         });
       });
-
-      // include your swipe/drag logic or keep simple click/hover for now
-      // (If you want, paste your initSwipeDrag here — it will work the same.)
     }
 
-    // wire day buttons: protect if none found
+    // wire day buttons
     dayBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         dayBtns.forEach(b => b.classList.remove('active'));
@@ -261,13 +291,29 @@
     // init default
     buildTrackFor('1');
 
-    // re-center on resize
-    window.addEventListener('resize', () => setTimeout(()=> centerCard(currentIndex, true), 60), { passive: true });
+    // reflow/responsive watcher: rebuild or toggle vertical class on resize
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        // If track exists toggle vertical class, recenter or scroll current index into view
+        if (track) {
+          if (isVerticalMode()) {
+            track.classList.add('vertical');
+          } else {
+            track.classList.remove('vertical');
+          }
+        }
+        // re-center (instant)
+        setTimeout(()=> centerCard(currentIndex, true), 80);
+      }, 120);
+    }, { passive: true });
 
   } catch (err) {
     console.error('[Schedule] Unexpected error:', err);
   }
 })();
+
 
 
 

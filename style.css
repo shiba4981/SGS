@@ -1425,8 +1425,15 @@ color: var(--muted);
    - Provides responsive, elegant cinematic look
 ------------------------------- */
 
+/* =========================
+   SCHEDULE — Responsive Fixes + Cinematic Styles
+   ========================= */
+
+/* enforce box-sizing for predictable widths inside this component */
+#schedule, #schedule * { box-sizing: border-box; }
+
+/* section-scoped variables */
 #schedule {
-  /* section-scoped variables */
   --muted: #9ea9b6;
   --text: #e9f0fb;
   --accent1: #7c3aed;
@@ -1438,25 +1445,28 @@ color: var(--muted);
   --shadow: 0 26px 60px rgba(3,8,20,0.6);
 }
 
-/* wrapper (grid) */
+/* wrapper */
 #schedule.schedule-cinematic { padding: 56px 0; }
 #schedule .schedule-wrap {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-display: flex;
+  display: flex;
   gap: 36px;
   align-items: start;
+  padding: 0 18px; /* prevent page-edge overflow */
 }
+
+/* small screens: column layout */
 @media (max-width: 640px) {
   #schedule .schedule-wrap {
     flex-direction: column-reverse;
-    gap: 32px;  
+    gap: 32px;
+    padding: 0 12px;
   }
 }
 
-
-/* LEFT - label, title, subtitle */
+/* left side */
 #schedule .schedule-side { padding: 6px 8px; }
 #schedule .label {
   display: inline-block;
@@ -1482,7 +1492,7 @@ display: flex;
   font-size: 14px;
 }
 
-/* DAY BUTTONS */
+/* day buttons */
 #schedule .schedule-days {
   margin-top: 22px;
   display: flex;
@@ -1515,13 +1525,16 @@ display: flex;
   border-color: rgba(124,58,237,0.12);
 }
 
-/* TIMELINE / PLAYER */
-#schedule .schedule-timeline { position: relative; overflow: hidden; min-height: var(--card-h); padding: 28px 10px; }
+/* TIMELINE / PLAYER - ensure no page-level horizontal overflow */
+#schedule .schedule-timeline {
+  position: relative;
+  overflow: hidden;     /* kill any accidental horizontal overflow */
+  min-height: var(--card-h);
+  padding: 28px 10px;
+  width: 100%;
+}
 
-
-
-
-/* cards player and track */
+/* cards player */
 #schedule .cards-player {
   perspective: 1500px;
   display: flex;
@@ -1529,69 +1542,26 @@ display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px 6px;
-   overflow-y: auto;
-   scrollbar-width: 2px;
-  overflow-x: hidden;
-  max-height: 620px; /* adjust height */
-}
-/* hide scrollbar but preserve scrolling */
-#cardsPlayer {
-  overflow-y: auto;            /* keep scroll behavior */
-  -ms-overflow-style: none;    /* IE and old Edge */
-  scrollbar-width: none;       /* Firefox */
+  overflow-y: auto;
+  overflow-x: hidden;   /* important: prevent horizontal overflow */
+  scrollbar-width: thin;
+  max-height: 620px;
 }
 
-/* WebKit browsers */
-#cardsPlayer::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  background: transparent;
-}
+/* hide scrollbar but preserve scroll behavior (webkit) */
+#cardsPlayer { overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none; }
+#cardsPlayer::-webkit-scrollbar { width: 0; height: 0; background: transparent; }
 
-#schedule .schedule-days.vertical-enabled {
-  flex-direction: row;
-  gap: 14px;
-}
-
+/* track (horizontal by default) */
 #schedule .cards-track {
   display: flex;
   gap: var(--gap);
   align-items: center;
   transition: transform 0.72s cubic-bezier(.2,.9,.25,1);
+  will-change: transform;
 }
 
-/* -------------------------
-   VERTICAL SCHEDULE LAYOUT
-------------------------- */
-
-#schedule .cards-track.vertical {
-  display: flex;
-  flex-direction: column;       /* STACK CARDS VERTICALLY */
-  align-items: stretch;         /* full width */
-  justify-content: flex-start;
-  gap: 24px;
-  transform: none !important;   /* remove horizontal transform */
-}
-
-#schedule .cards-track.vertical .card {
-  width: 100%;
-  max-width: 620px;             /* premium width */
-  height: auto;                 /* allow proper height */
-  padding: 22px 26px;
-  margin: 0 auto;               /* center card vertically */
-  transform: none !important;   /* disable 3D placement */
-}
-
-#schedule .cards-track.vertical .card::before {
-  left: 0;
-  top: 12px;
-  bottom: 12px;
-  width: 5px;                   /* beautiful accent bar */
-}
-
-
-
-/* card base */
+/* CARD - desktop/horizontal defaults */
 #schedule .card {
   width: var(--card-w);
   height: var(--card-h);
@@ -1608,8 +1578,6 @@ display: flex;
   transition: transform .72s cubic-bezier(.2,.9,.25,1), box-shadow .25s, opacity .25s;
   transform-origin: center center;
 }
-
-/* subtle vertical accent */
 #schedule .card::before {
   content: "";
   position: absolute;
@@ -1622,77 +1590,20 @@ display: flex;
   opacity: 0.95;
 }
 
-#schedule .cards-track.vertical .card[data-pos] {
-  transform: none !important;
-  opacity: 1 !important;
-}
-
-
-/* content inside .card (matches your JS structure .card-layer -> .time/.title/.desc) */
-#schedule .card-layer {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  transform: translate3d(0,0,0);
-  transition: transform .36s ease-out;
-}
-
-#schedule .time {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--muted);
-}
-
-#schedule .title {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--text);
-  margin-top: 4px;
-  line-height: 1.06;
-}
-
-#schedule .desc {
-  font-size: 14px;
-  color: var(--muted);
-  margin-top: 6px;
-  opacity: 0.95;
-}
-
-/* hover / tilt state (JS applies transform inline) */
-#schedule .card.tilt { will-change: transform; }
-
-/* bottom row: (if you add controls inside cards later) */
-#schedule .card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
+/* card content */
+#schedule .card-layer { display:flex; flex-direction:column; gap:8px; transform: translate3d(0,0,0); transition: transform .36s ease-out; }
+#schedule .time { font-size: 13px; font-weight: 700; color: var(--muted); }
+#schedule .title { font-size: 18px; font-weight: 800; color: var(--text); margin-top: 4px; line-height: 1.06; }
+#schedule .desc { font-size: 14px; color: var(--muted); margin-top: 6px; opacity: 0.95; }
 
 /* dots */
-#schedule .dots {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 10px;
-}
-#schedule .dots button {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  border: none;
-  background: rgba(255,255,255,0.07);
-  cursor: pointer;
-}
-#schedule .dots button.active {
-  background: linear-gradient(90deg, var(--accent1), var(--accent2));
-  box-shadow: 0 6px 16px rgba(124,58,237,0.08);
-}
+#schedule .dots { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
+#schedule .dots button { width: 10px; height: 10px; border-radius: 999px; border: none; background: rgba(255,255,255,0.07); cursor: pointer; }
+#schedule .dots button.active { background: linear-gradient(90deg, var(--accent1), var(--accent2)); box-shadow: 0 6px 16px rgba(124,58,237,0.08); }
 
-/* center class used by JS (also provides a slight scale on instant center) */
 #schedule .card.center { box-shadow: 0 40px 88px rgba(3,8,20,0.8); }
 
-/* accessibility focus outlines */
+/* focus outlines */
 #schedule .day-btn:focus-visible,
 #schedule .controls .nav:focus-visible,
 #schedule .cards-player:focus-visible,
@@ -1701,27 +1612,58 @@ display: flex;
   outline-offset: 3px;
 }
 
-/* responsive adjustments */
-@media (max-width: 980px) {
-  #schedule .schedule-wrap { grid-template-columns: 1fr; gap: 24px; }
+/* -------------------------
+   RESPONSIVE: STACK VERTICAL ON SMALL SCREENS
+   (switch to vertical layout at <= 900px)
+------------------------- */
+@media (max-width: 900px) {
+  /* reduce card size vars safely */
+  #schedule { --card-w: 100%; --card-h: auto; --gap: 18px; }
+
+  /* force vertical track */
+  #schedule .cards-track {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px;
+    align-items: stretch;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* cards become full width but limited to a premium max */
+  #schedule .card {
+    width: 100% !important;
+    max-width: 720px;
+    height: auto;
+    padding: 18px;
+    margin: 0 auto;
+    transform: none !important;
+  }
+
+  /* move side & timeline ordering for narrow screens */
+  #schedule .schedule-wrap { gap: 18px; }
   #schedule .schedule-side { order: 2; }
-  #schedule .schedule-timeline { order: 1; padding: 18px 6px; min-height: auto; }
-  :root { --card-w: 320px; --card-h: 200px; }
-  #schedule .controls { right: 8px; top: 8px; }
+  #schedule .schedule-timeline { order: 1; padding: 12px 6px; min-height: auto; }
+  #schedule .schedule-days { flex-direction: row; gap: 10px; justify-content: center; }
+
+  /* disable pointer tilt states on mobile */
+  #schedule .card.tilt { will-change: auto; transform: none !important; }
+  #schedule .card-layer { transform: none !important; }
 }
 
+/* even narrower tweaks */
 @media (max-width: 600px) {
-  :root { --card-w: 300px; --card-h: 180px; --gap: 18px; }
-  #schedule .schedule-days { flex-direction: row; gap: 10px; }
-  #schedule .day-btn { flex: 1; padding: 10px; }
+  #schedule { --card-w: 100%; --card-h: auto; --gap: 12px; }
+  #schedule .day-btn { padding: 10px; flex: 1; min-width: 0; }
   #schedule .card::before { left: 8px; top: 8px; bottom: 8px; width: 5px; }
   #schedule .time { font-size: 12px; }
   #schedule .title { font-size: 16px; }
   #schedule .desc { font-size: 13px; }
 }
 
-/* small utility: non-intrusive text color override if needed */
+/* utility: non-intrusive muted */
 #schedule .muted { color: var(--muted); }
+
 
 
 /* =========================
