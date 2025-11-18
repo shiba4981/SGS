@@ -115,13 +115,15 @@
       "1": [
         { time: "10:00 AM", title: "Inauguration & Welcome Address", desc: "Opening ceremony with esteemed guests." },
         { time: "11:00 AM", title: "Yuva Swadeshi Navachar Pradarshani", desc: "Interactive exhibition of student and startup innovations." },
-        { time: "05:00 PM", title: "Keynote: Jeff J Hunter", desc: "Leveraging Remote Teams & AI" },
-        { time: "08:35 PM", title: "Star Musical Night", desc: "An unforgettable performance by Sunidhi Chauhan / Ankit Tiwari." }
+        { time: "03:00 pm", title: "Voices of Future ", desc: "It will transform students into global voices shaping AI's future." },
+        { time: "05:00 PM", title: "Keynote: Bodhisattwa Sanghapriya", desc: "Founder & CEO, IG Drones" },
+        { time: "08:35 PM", title: "Star Musical Night", desc: "An unforgettable performance." }
       ],
       "2": [
         { time: "09:30 AM", title: "Panel: Policy & Governance", desc: "Experts discuss AI policy and governance." },
         { time: "11:00 AM", title: "Student Pitch Round", desc: "Selected student startups pitch to mentors." },
         { time: "02:00 PM", title: "Hands-on Labs & Mentorship", desc: "Practical sessions on responsible AI." },
+        { time: "05:00 PM", title: "Keynote: Dr. Ramesh Kumar Mishra", desc: "Professor of cognitive science at the University of Hyderabad" },
         { time: "06:00 PM", title: "Fireside Chats", desc: "Informal conversations with leaders." }
       ],
       "3": [
