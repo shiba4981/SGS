@@ -217,39 +217,7 @@
       setTimeout(()=> centerCard(0, true), 60);
     }
 
-    function attachCardInteractions() {
-      if (!track) return;
-      const cards = Array.from(track.children);
-      cards.forEach(c => { c.onpointermove = c.onpointerleave = c.onclick = c.onmouseenter = c.onmouseleave = null; });
 
-      cards.forEach((card, idx) => {
-        card.addEventListener('click', () => { if (window.innerWidth > 900) centerCard(idx); });
-        card.addEventListener('mouseenter', () => { if (window.innerWidth > 900) card._hoverTimeout = setTimeout(()=> centerCard(idx), 220); });
-        card.addEventListener('mouseleave', () => clearTimeout(card._hoverTimeout));
-        card.addEventListener('pointermove', (ev) => {
-          if (window.innerWidth <= 900) return;
-          const r = card.getBoundingClientRect();
-          const cx = r.left + r.width / 2;
-          const cy = r.top + r.height / 2;
-          const px = (ev.clientX - cx) / (r.width / 2);
-          const py = (ev.clientY - cy) / (r.height / 2);
-          const rx = (py * 6).toFixed(2), ry = (px * -8).toFixed(2);
-          card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(12px)`;
-          const layer = card.querySelector('.card-layer');
-          if (layer) layer.style.transform = `translate3d(${px * -8}px, ${py * -6}px, 0)`;
-          card.classList.add('tilt');
-        });
-        card.addEventListener('pointerleave', () => {
-          card.style.transform = '';
-          const layer = card.querySelector('.card-layer');
-          if (layer) layer.style.transform = '';
-          card.classList.remove('tilt');
-        });
-      });
-
-      // include your swipe/drag logic or keep simple click/hover for now
-      // (If you want, paste your initSwipeDrag here — it will work the same.)
-    }
 
     // wire day buttons: protect if none found
     dayBtns.forEach(btn => {

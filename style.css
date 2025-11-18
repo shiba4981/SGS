@@ -1552,18 +1552,34 @@ color: var(--muted);
 #cardsPlayer { overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none; }
 #cardsPlayer::-webkit-scrollbar { width: 0; height: 0; background: transparent; }
 
-/* track (horizontal by default) */
+/* ---------normally testing pasting */
+
+/* Track Container */
 #schedule .cards-track {
   display: flex;
+  flex-direction: column;
   gap: var(--gap);
   align-items: center;
-  transition: transform 0.72s cubic-bezier(.2,.9,.25,1);
-  will-change: transform;
+  
+  overflow-y: scroll; /* or auto — required for scrollbar to exist */
+
+  /* Hide scrollbar across browsers */
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
 }
+
+/* Chrome, Safari, Opera */
+#schedule .cards-track::-webkit-scrollbar {
+  display: none;
+}
+
+
+
 
 /* CARD - desktop/horizontal defaults */
 #schedule .card {
   width: var(--card-w);
+  min-height: 175px;
   height: var(--card-h);
   border-radius: var(--radius);
   padding: 18px;
