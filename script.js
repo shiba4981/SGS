@@ -644,3 +644,55 @@
   // cleanup handlers when leaving page
   window.addEventListener('pagehide', ()=>{ if (raf) cancelAnimationFrame(raf); });
 })();
+// THEME: entrance + micro animations
+(function () {
+  const section = document.querySelector('.enhanced-theme');
+  if (!section) return;
+
+  const left = section.querySelector('.theme-left');
+  const right = section.querySelector('.theme-right');
+  const badges = section.querySelectorAll('.card-badges .badge');
+
+  function reveal() {
+    // if gsap available, use it
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.fromTo(left, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 80%' } });
+      gsap.fromTo(right, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, delay: 0.12, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 80%' } });
+      gsap.fromTo(badges, { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.12, delay: 0.5, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 78%' } });
+    } else {
+      // fallback: simple class toggle using IntersectionObserver
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            left.classList.add('reveal', 'in');
+            right.classList.add('reveal', 'in');
+            badges.forEach((b, i) => setTimeout(()=> b.classList.add('show'), 220 * i));
+            io.disconnect();
+          }
+        });
+      }, { threshold: 0.18 });
+      io.observe(section);
+      // ensure initial CSS reveal state
+      left.classList.add('reveal');
+      right.classList.add('reveal');
+    }
+  }
+
+  // small parallax on pointer move for the card (desktop only)
+  const card = section.querySelector('.theme-art-card');
+  function cardParallax(e) {
+    if (window.matchMedia && window.matchMedia('(hover: none)').matches) return;
+    const r = card.getBoundingClientRect();
+    const dx = (e.clientX - (r.left + r.width/2)) / r.width;
+    const dy = (e.clientY - (r.top + r.height/2)) / r.height;
+    card.style.transform = `translateY(${ -6 + dy * -8 }px) rotateX(${ -dy * 4 }deg) rotateY(${ dx * 6 }deg) scale(1.02)`;
+  }
+  function resetCard() { card.style.transform = ''; }
+
+  card.addEventListener('mousemove', cardParallax);
+  card.addEventListener('mouseleave', resetCard);
+  card.addEventListener('touchstart', resetCard);
+
+  // init
+  reveal();
+})();

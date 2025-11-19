@@ -199,7 +199,7 @@
       isolation: isolate;
     }
 
-    /* background layers: image -> dark vignette -> color gradient glow */
+    /* background layer - removed ai.png so videos take precedence */
     .hero-refined__bg {
       position: absolute;
       inset: 0;
@@ -207,13 +207,14 @@
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
-      background-image: url('ai.png');
+      /* background-image removed to allow video to show */
+      background-image: none;
     }
 
     .hero-refined__overlay {
       position: absolute;
       inset: 0;
-      z-index: 1;
+      z-index: 2;
       background: radial-gradient(60% 40% at 20% 20%, rgba(212, 0, 255, 0.14), transparent 15%), var(--glass-grad);
       mix-blend-mode: multiply;
       pointer-events: none;
@@ -222,7 +223,7 @@
     /* faint moving light streak for luxury motion */
     .hero-refined__light {
       position: absolute;
-      z-index: 2;
+      z-index: 3;
       inset: auto -10% 10% auto;
       width: 60%;
       height: 80%;
@@ -249,7 +250,7 @@
 
     .hero-refined__inner {
       position: relative;
-      z-index: 3;
+      z-index: 4;
       display: grid;
       grid-template-columns: 1fr 420px;
       gap: 40px;
@@ -296,14 +297,6 @@
       margin-top: 14px;
       font-weight: 700;
       color: var(--accentA);
-    }
-
-    .hero-ctas {
-      margin-top: 22px;
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      flex-wrap: wrap;
     }
 
     .btn-hero {
@@ -388,6 +381,37 @@
         gap: 18px;
       }
     }
+
+    /* ---------------------------
+       Video-specific overrides
+       --------------------------- */
+    .video-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 0;
+      pointer-events: none;
+      transform: translateZ(0);
+      will-change: transform, opacity;
+      filter: saturate(0.98) contrast(1.02);
+      display: block !important; /* force show unless prefers-reduced-motion */
+    }
+
+    /* theme-art-card fallback removal (we will insert a video inside it) */
+    .theme-art-card { background-image: none !important; }
+
+    /* Respect reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      .video-bg { display: none !important; }
+    }
+
+    /* if you still want to hide on very tiny devices you could use:
+    @media (max-width: 420px) { .video-bg { display: none !important; } }
+    but by default videos will show on mobile (per your request).
+    */
   </style>
 </head>
 
@@ -411,7 +435,25 @@
 
   <!-- ====== REPLACED HERO (hero-refined) ====== -->
   <section class="hero-refined" aria-labelledby="hero-title">
-    <div class="hero-refined__bg" role="img" aria-label="AI art background"></div>
+    <!-- Video background for HERO (video1) -->
+    <div class="hero-refined__bg" role="img" aria-label="AI video background">
+      <video
+        class="video-bg video1-bg"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        aria-hidden="true"
+        tabindex="-1"
+      >
+        <!-- Use .mp4 first (widest compatibility), then .webm -->
+        <source src="small-vecteezy_artificial-intelligence-digital-brain-concept_46778222_small (2).mp4" type="video/mp4">
+        <source src="small-vecteezy_artificial-intelligence-digital-brain-concept_46778222_small (2).mp4" type="video/webm">
+        <!-- fallback text -->
+      </video>
+    </div>
+
     <div class="hero-refined__overlay" aria-hidden="true"></div>
     <div class="hero-refined__light" aria-hidden="true"></div>
 
@@ -494,39 +536,90 @@
     </div>
   </section>
 
-  <!-- ======================================
-     NEW PROFESSIONAL THEME SECTION
-     ====================================== -->
-  <section id="theme" class="theme-pro" aria-labelledby="themeTitle">
+  <!-- ===== THEME — ENHANCED: paste in place of old #theme section ===== -->
+<section id="theme" class="theme-pro enhanced-theme" aria-labelledby="themeTitle" data-anim="ready">
+  <!-- Video background (behind everything) -->
+  <video class="video-bg theme-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="video2-bg.mp4" type="video/mp4">
+    <source src="video2-bg.webm" type="video/webm">
+  </video>
 
-    <!-- Animated glow layer -->
-    <div class="theme-pro-glow"></div>
+  <!-- Soft grain overlay for filmic texture -->
+  <svg class="theme-grain" aria-hidden="true" width="0" height="0" focusable="false">
+    <filter id="grain">
+      <feTurbulence baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" type="fractalNoise"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.06"/>
+      </feComponentTransfer>
+    </filter>
+  </svg>
 
-    <div class="theme-pro-inner">
-      <div class="theme-pro-left">
-        <span class="theme-kicker">SUMMIT THEME</span>
-        <h2 id="themeTitle">Governance of AI &amp; its ethics</h2>
+  <!-- Glow layers -->
+  <div class="theme-glow"></div>
+  <div class="theme-vignette" aria-hidden="true"></div>
 
-        <p class="theme-desc">
-          For decades, Indian students built billion-dollar outcomes while being labeled cheap. This summit flips that
-          narrative.
-        </p>
-        <p class="theme-desc">
-          It celebrates the hustler who balances exams, clients, code, culture, ethics and excellence while inviting
-          global participation.
-        </p>
-        <p class="theme-desc">
-          Witness that powerful blend of consciousness, innovation and policy-shaping thought leadership.
-        </p>
+  <div class="theme-inner container">
+    <div class="theme-left" id="themeLeft">
+      <span class="theme-kicker">SUMMIT THEME</span>
+      <h2 id="themeTitle" class="theme-headline">
+        Governance of AI <span class="accent">— Ethics, Policy & Student Power</span>
+      </h2>
+
+      <p class="theme-lead">
+        Join conversations and labs that move policy from PowerPoint to practice. We bring students, policymakers,
+        and technologists together to co-create responsible AI for real-world impact.
+      </p>
+
+      <ul class="theme-features" aria-hidden="true">
+        <li><strong>Policy Labs</strong><span>Hands-on law & regulation workshops</span></li>
+        <li><strong>Student Showcases</strong><span>Prototype demos & product clinics</span></li>
+        <li><strong>Scholarship Tracks</strong><span>Grants & mentorship for winners</span></li>
+      </ul>
+
+      <div class="theme-ctas">
+        <a class="btn btn-primary" href="register.html">Register Now ▸</a>
+        <a class="btn btn-ghost" href="#speakers">See Speakers ▸</a>
       </div>
+    </div>
 
-      <div class="theme-pro-right">
-        <div class="theme-art-card">
-          <div class="theme-art-glow"></div>
+    <div class="theme-right" id="themeRight" aria-hidden="true">
+      <div class="theme-art-card" role="img" aria-label="Decorative AI art card">
+        <div class="theme-card-inner">
+          <div class="card-visual" id="cardVisual">
+            <!-- Decorative: concentric rings + core -->
+            <svg viewBox="0 0 220 220" class="theme-emblem" aria-hidden="true" focusable="false">
+              <defs>
+                <linearGradient id="tgrad" x1="0" x2="1">
+                  <stop offset="0" stop-color="#d400ff"/>
+                  <stop offset="1" stop-color="#00c6ff"/>
+                </linearGradient>
+              </defs>
+              <g transform="translate(110,110)">
+                <circle r="72" stroke="url(#tgrad)" stroke-width="2.6" fill="rgba(255,255,255,0.02)"/>
+                <circle r="46" stroke="rgba(255,255,255,0.06)" stroke-width="1.2" fill="none"/>
+                <circle class="core" cx="0" cy="0" r="12" fill="#fff"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="card-copy">
+            <h3>Policy Labs — Build & Ship</h3>
+            <p>Work directly with mentors to craft small, deployable policy proposals that could be adopted by institutions.</p>
+          </div>
+
+          <div class="card-badges">
+            <span class="badge">Workshops</span>
+            <span class="badge">Hackathons</span>
+            <span class="badge">Grants</span>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+<!-- ===== end enhanced theme ===== -->
+
 
   <!-- PERKS -->
   <!-- PERKS (NEW – PREMIUM FUTURISTIC DESIGN) -->
