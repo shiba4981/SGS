@@ -24,7 +24,6 @@
 
 /* ---------- Base layout ---------- */
 * { box-sizing: border-box; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-html,body { height: 100%; margin: 0; font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color:var(--text); background: radial-gradient(circle at 30% 20%, var(--bg-2), var(--bg-1)) fixed; }
 
 /* Page container centers content and adds breathing room */
 .register-page, .admin-page {
@@ -37,7 +36,9 @@ html,body { height: 100%; margin: 0; font-family: 'Inter', system-ui, -apple-sys
 
 /* ---------- Card ---------- */
 .form-card {
+ 
   width: 100%;
+
   max-width: 520px;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   border: 1px solid var(--glass-border);
@@ -51,6 +52,18 @@ html,body { height: 100%; margin: 0; font-family: 'Inter', system-ui, -apple-sys
   position: relative;
   overflow: hidden;
 }
+.opname{
+  color:#0a0018;
+}
+.actionsvertical {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+}
+
+
+
 
 /* subtle floating accent at top-left (decorative) */
 .form-card::before{
@@ -189,6 +202,7 @@ textarea { min-height: 110px; resize: vertical; }
     width: 100%;
     max-width: none;
   }
+
 }
 
 
